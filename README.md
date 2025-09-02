@@ -1,2 +1,2 @@
-# HurryHand-
+# HurryHand
 Proyecto final Ingenieria de Software 
