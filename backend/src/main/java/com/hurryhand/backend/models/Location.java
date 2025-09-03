@@ -1,4 +1,4 @@
-package com.hurryhand.backend.dto;
+package com.hurryhand.backend.models;
 
 
 import com.hurryhand.backend.enums.DepartamentoUY;

@@ -14,7 +14,6 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class Admin extends BaseUser {
 }

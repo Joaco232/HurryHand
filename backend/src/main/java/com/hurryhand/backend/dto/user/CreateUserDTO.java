@@ -1,38 +1,22 @@
-package com.hurryhand.backend.models;
+package com.hurryhand.backend.dto.user;
 
 
 import com.hurryhand.backend.enums.PersonalIdType;
 import com.hurryhand.backend.enums.Role;
+import com.hurryhand.backend.models.Location;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import java.time.LocalDate;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-
-@Getter
-@Setter
-@SuperBuilder
-@NoArgsConstructor
+@Data
+@Builder
 @AllArgsConstructor
-@MappedSuperclass
-public abstract class BaseUser {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID",unique = true, nullable = false)
-    private Long id;
+@NoArgsConstructor
+public class CreateUserDTO {
 
     @Column(name = "EMAIL", unique = true, nullable = false)
     @NotNull(message = "El email no puede ser nulo.")
@@ -70,17 +54,15 @@ public abstract class BaseUser {
     @Column(name = "PERSONAL_ID_TYPE")
     private PersonalIdType personalIdType;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
-    @NotNull(message = "Deben definirse los roles.")
-    private List<Role> roles = new ArrayList<>();
+    @Column(name = "BIRTHDATE", nullable = false)
+    @NotNull(message = "La fecha de nacimiento no puede ser nula.")
+    @Past(message = "La fecha de nacimiento debe estar en pasado.")
+    private LocalDate birthdate;
 
-    @Column(name = "CREATED_AT", updatable = false)
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+    @Column(name = "PROFILE_PHOTO", length = 254)
+    @Size(max = 254, message = "La ruta de la foto de perfil no puede superar 254 caracteres.")
+    private String profilePhoto;
 
-    @Column(name = "UPDATED_AT")
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    private Location location;
 
 }
