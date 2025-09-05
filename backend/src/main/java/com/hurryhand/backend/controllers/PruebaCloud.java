@@ -12,7 +12,7 @@ import java.nio.file.Files;
 @Controller
 public class PruebaCloud {
 
-    @GetMapping("/")
+    @GetMapping("/test")
     public ResponseEntity<String> hurryhand() throws IOException {
         var resource = new ClassPathResource("static/pruebaCloud.html");
         String html = Files.readString(resource.getFile().toPath());
