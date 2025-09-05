@@ -42,6 +42,10 @@ public class ServicePost {
 
     private Integer price;
 
+    private Location location;
+
+
+
 
 
 
