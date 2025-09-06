@@ -59,10 +59,4 @@ public class CreateUserDTO {
     @Past(message = "La fecha de nacimiento debe estar en pasado.")
     private LocalDate birthdate;
 
-    @Column(name = "PROFILE_PHOTO", length = 254)
-    @Size(max = 254, message = "La ruta de la foto de perfil no puede superar 254 caracteres.")
-    private String profilePhoto;
-
-    private Location location;
-
 }

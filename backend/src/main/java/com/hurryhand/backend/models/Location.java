@@ -22,7 +22,7 @@ import javax.validation.constraints.Pattern;
 public class Location {
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "El departamente no puede ser nulo")
+    @NotNull(message = "El departamento no puede ser nulo")
     @Column(name = "DEPARTMENT", nullable = false)
     private DepartamentoUY departamento;
 

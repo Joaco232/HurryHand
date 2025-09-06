@@ -3,6 +3,8 @@ package com.hurryhand.backend.services;
 
 import com.hurryhand.backend.dto.user.CreateUserDTO;
 import com.hurryhand.backend.enums.Role;
+import com.hurryhand.backend.exceptions.attribute.EmailAlreadyInUseException;
+import com.hurryhand.backend.exceptions.user.UnderAgeUserException;
 import com.hurryhand.backend.mappers.UserMapper;
 import com.hurryhand.backend.models.User;
 import com.hurryhand.backend.repositories.UserRepository;
@@ -27,7 +29,7 @@ public class UserService {
     private final UserMapper userMapper;
 
     @Transactional
-    public User addNewUser(@Valid CreateUserDTO createUserDTO) {
+    public User addNewUser(@Valid CreateUserDTO createUserDTO) throws UnderAgeUserException, EmailAlreadyInUseException {
 
         userValidator.validateUniqueEmail(createUserDTO.getEmail());
         userValidator.validateUserAge(createUserDTO.getBirthdate());
