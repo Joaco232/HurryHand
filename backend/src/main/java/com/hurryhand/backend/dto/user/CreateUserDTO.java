@@ -2,8 +2,6 @@ package com.hurryhand.backend.dto.user;
 
 
 import com.hurryhand.backend.enums.PersonalIdType;
-import com.hurryhand.backend.enums.Role;
-import com.hurryhand.backend.models.Location;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;

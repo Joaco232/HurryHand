@@ -2,6 +2,7 @@ package com.hurryhand.backend.mappers;
 
 
 import com.hurryhand.backend.dto.user.CreateUserDTO;
+import com.hurryhand.backend.dto.user.UserResponseDTO;
 import com.hurryhand.backend.models.User;
 import org.springframework.stereotype.Component;
 
@@ -15,11 +16,25 @@ public class UserMapper {
                 .name(dto.getName())
                 .surname(dto.getSurname())
                 .birthdate(dto.getBirthdate())
-                .profilePhoto(dto.getProfilePhoto())
                 .password(encodedPassword)
                 .personalIdType(dto.getPersonalIdType())
                 .personalId(dto.getPersonalId())
-                .location(dto.getLocation())
+                .build();
+    }
+
+    public UserResponseDTO toUserResponseDTO(User user) {
+
+        return UserResponseDTO.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .birthdate(user.getBirthdate())
+                .profilePhoto(user.getProfilePhoto())
+                .personalId(user.getPersonalId())
+                .personalIdType(user.getPersonalIdType())
+                .location(user.getLocation())
+                .createdAt(user.getCreatedAt())
                 .build();
     }
 

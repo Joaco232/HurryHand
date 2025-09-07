@@ -22,25 +22,20 @@ import javax.validation.constraints.Pattern;
 public class Location {
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "El departamento no puede ser nulo")
-    @Column(name = "DEPARTMENT", nullable = false)
+    @Column(name = "DEPARTMENT")
     private DepartamentoUY departamento;
 
-    @NotNull(message = "El departamente no puede ser nulo")
     @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s'\\-]*$", message = "La ciudad solo puede contener letras y espacios.")
-    @Column(name = "CITY", nullable = false, length = 80)
+    @Column(name = "CITY", length = 80)
     private String city;
 
-    @NotNull(message = "La calle principal no puede ser nula")
     @Pattern(regexp = "^[a-zA-Z0-9áéíóúÁÉÍÓÚüÜñÑ\\s'\\-\\.]*$", message = "La calle puede contener letras, números y guiones.")
     @Column(name = "STREET")
     private String street;
 
-    @NotNull(message = "El numero de puerta no puede ser nulo")
     @Column(name = "STREET_NUMBER") //HAY QUE CHEQUEAR QUE NO SEA NEGATIVO NO ME DEJA USAR FUNCION MIN
     private Integer streetNumber;
 
-    @NotNull(message = "El codigo postal no puede ser nulo")
     @Column(name = "POSTAL_CODE") //LO MISMO ACA CON QUE NO PUEDE HABER NEGATIVOS
     private Integer postalCode;
 

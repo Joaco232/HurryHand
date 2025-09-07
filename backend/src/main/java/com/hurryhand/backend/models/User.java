@@ -23,7 +23,6 @@ import java.time.LocalDate;
 @Entity
 public class User extends BaseUser {
 
-
     @Column(name = "BIRTHDATE", nullable = false)
     @NotNull(message = "La fecha de nacimiento no puede ser nula.")
     @Past(message = "La fecha de nacimiento debe estar en pasado.")

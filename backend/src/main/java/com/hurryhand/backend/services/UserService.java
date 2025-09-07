@@ -5,6 +5,7 @@ import com.hurryhand.backend.dto.user.CreateUserDTO;
 import com.hurryhand.backend.enums.Role;
 import com.hurryhand.backend.exceptions.attribute.EmailAlreadyInUseException;
 import com.hurryhand.backend.exceptions.user.UnderAgeUserException;
+import com.hurryhand.backend.exceptions.user.UserNotFoundException;
 import com.hurryhand.backend.mappers.UserMapper;
 import com.hurryhand.backend.models.User;
 import com.hurryhand.backend.repositories.UserRepository;
@@ -56,15 +57,8 @@ public class UserService {
     }
 
 
+    public User getUserById(Long id) throws UserNotFoundException {
 
-
-
-
-
-
-
-
-
-
-
+        return userRepository.findUserById(id).orElseThrow(() -> new UserNotFoundException("El usuario no existe"));
+    }
 }
