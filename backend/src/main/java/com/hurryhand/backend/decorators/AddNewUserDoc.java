@@ -4,6 +4,7 @@ package com.hurryhand.backend.decorators;
 import com.hurryhand.backend.auth.LoginRequest;
 import com.hurryhand.backend.auth.LoginResponse;
 import com.hurryhand.backend.dto.ApiError;
+import com.hurryhand.backend.dto.user.CreateUserDTO;
 import com.hurryhand.backend.dto.user.UserResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,6 +17,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Map;
 
 
 @Target({ElementType.METHOD})
