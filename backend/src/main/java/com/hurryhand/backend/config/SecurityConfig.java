@@ -70,7 +70,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/api/user").permitAll()
                         .requestMatchers(HttpMethod.POST,"auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/user/**").authenticated()
-
+                        .anyRequest().permitAll()
 
 
                 )

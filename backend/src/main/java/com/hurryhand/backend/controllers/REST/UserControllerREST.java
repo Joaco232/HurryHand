@@ -1,6 +1,8 @@
 package com.hurryhand.backend.controllers.REST;
 
 
+import com.hurryhand.backend.decorators.AddNewUserDoc;
+import com.hurryhand.backend.decorators.GetUserByIdDoc;
 import com.hurryhand.backend.dto.ApiError;
 import com.hurryhand.backend.dto.user.CreateUserDTO;
 import com.hurryhand.backend.dto.user.UserResponseDTO;
@@ -29,36 +31,7 @@ public class UserControllerREST {
     private final UserMapper userMapper;
 
     @PostMapping()
-    @Operation(summary = "Registrar Usuario",
-            description = "Recibe los datos necesarios para registrar un nuevo usuario en la base de datos.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "CreateUserDTO",
-                    required = true,
-                    content = @Content(schema = @Schema(implementation = CreateUserDTO.class, name = "CreateUserDTO"))
-    ))
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Usuario registrado",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = Map.class)
-                    )),
-            @ApiResponse(
-                    responseCode = "409",
-                    description = "Email ya registrado",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ApiError.class)
-                    )),
-            @ApiResponse(
-                    responseCode = "406",
-                    description = "Usuario menor de edad",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ApiError.class)
-                    ))
-    })
+    @AddNewUserDoc
     public ResponseEntity<Map<String, String>> addNewUser(@Valid @RequestBody CreateUserDTO newUserDTO) {
 
         userService.addNewUser(newUserDTO);
@@ -70,29 +43,8 @@ public class UserControllerREST {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Obtener usuario por ID",
-            description = "Devuelve los datos del usuario al ingresar su id.",
-            parameters = {
-                    @Parameter(name = "id", description = "ID del usuario", example = "123")
-    })
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Usuario encontrado",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = UserResponseDTO.class)
-                    )),
-            @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Usuario no encontrado",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ApiError.class)
-                    ))
-    })
-    public ResponseEntity<UserResponseDTO> getUser(@PathVariable Long id) {
+    @GetUserByIdDoc
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
 
         UserResponseDTO userDTO = userMapper.toUserResponseDTO(userService.getUserById(id));
 
