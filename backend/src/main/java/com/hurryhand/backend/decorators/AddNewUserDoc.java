@@ -20,24 +20,31 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-@Operation(summary = "Login general",
-        description = "Login para usuarios comunes y administradores.",
+@Operation(summary = "Registrar Usuario",
+        description = "Recibe los datos necesarios para registrar un nuevo usuario en la base de datos.",
         requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                description = "LoginRequest",
+                description = "CreateUserDTO",
                 required = true,
-                content = @Content(schema = @Schema(implementation = LoginRequest.class, name = "LoginRequest"))
+                content = @Content(schema = @Schema(implementation = CreateUserDTO.class, name = "CreateUserDTO"))
         ))
 @ApiResponses(value = {
         @ApiResponse(
                 responseCode = "200",
-                description = "Login exitoso",
+                description = "Usuario registrado",
                 content = @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = LoginResponse.class)
+                        schema = @Schema(implementation = Map.class)
                 )),
         @ApiResponse(
-                responseCode = "403",
-                description = "Error de credenciales",
+                responseCode = "409",
+                description = "Email ya registrado",
+                content = @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = ApiError.class)
+                )),
+        @ApiResponse(
+                responseCode = "406",
+                description = "Usuario menor de edad",
                 content = @Content(
                         mediaType = "application/json",
                         schema = @Schema(implementation = ApiError.class)
