@@ -2,6 +2,7 @@ package com.hurryhand.backend.controllers.REST;
 
 
 import com.hurryhand.backend.decorators.AddNewUserDoc;
+import com.hurryhand.backend.decorators.GetUserByIdDoc;
 import com.hurryhand.backend.dto.ApiError;
 import com.hurryhand.backend.dto.user.CreateUserDTO;
 import com.hurryhand.backend.dto.user.UserResponseDTO;
@@ -42,6 +43,7 @@ public class UserControllerREST {
     }
 
     @GetMapping("/{id}")
+    @GetUserByIdDoc
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
 
         UserResponseDTO userDTO = userMapper.toUserResponseDTO(userService.getUserById(id));
