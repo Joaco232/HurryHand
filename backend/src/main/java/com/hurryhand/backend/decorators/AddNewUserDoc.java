@@ -1,6 +1,7 @@
 package com.hurryhand.backend.decorators;
 
 
+import com.hurryhand.backend.auth.LoginResponse;
 import com.hurryhand.backend.dto.ApiError;
 import com.hurryhand.backend.dto.user.UserResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,23 +19,24 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-@Operation(summary = "Obtener usuario por ID",
-        description = "Devuelve los datos del usuario al ingresar su id.",
-        parameters = {
-                @Parameter(name = "id", description = "ID del usuario", example = "123")
-        })
+@Operation(summary = "Login general",
+        description = "Login para usuarios comunes y administradores.",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                description = "LoginRequest",
+                required = true,
+                content = @Content(schema = @Schema(implementation = LoginRequest.class, name = "LoginRequest"))
+        ))
 @ApiResponses(value = {
         @ApiResponse(
                 responseCode = "200",
-                description = "Usuario encontrado",
+                description = "Login exitoso",
                 content = @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = UserResponseDTO.class)
+                        schema = @Schema(implementation = LoginResponse.class)
                 )),
-        @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
         @ApiResponse(
-                responseCode = "404",
-                description = "Usuario no encontrado",
+                responseCode = "403",
+                description = "Error de credenciales",
                 content = @Content(
                         mediaType = "application/json",
                         schema = @Schema(implementation = ApiError.class)
