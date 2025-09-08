@@ -1,6 +1,7 @@
 package com.hurryhand.backend.decorators;
 
 
+import com.hurryhand.backend.auth.LoginRequest;
 import com.hurryhand.backend.auth.LoginResponse;
 import com.hurryhand.backend.dto.ApiError;
 import com.hurryhand.backend.dto.user.UserResponseDTO;
