@@ -22,7 +22,7 @@ jobs:
 
       - name: Push Docker image
         run: |
-          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/hurryhand
+          IMAGE_NAME=ghcr.io/${{ github.repository_owner,, }}/hurryhand
           docker push $IMAGE_NAME:latest
           docker push $IMAGE_NAME:ultimo
           docker push $IMAGE_NAME:${{ github.sha }}
