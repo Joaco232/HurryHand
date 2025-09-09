@@ -2,7 +2,7 @@ name: Publish Docker image
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
@@ -10,13 +10,19 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build Docker image
-        run: docker build -t ghcr.io/${{ github.repository_owner }}/backend:latest .
+        run: |
+          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/hurryhand
+          docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:ultimo -t $IMAGE_NAME:${{ github.sha }} .
 
       - name: Push Docker image
-        run: docker push ghcr.io/${{ github.repository_owner }}/backend:latest
+        run: |
+          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/hurryhand
+          docker push $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:ultimo
+          docker push $IMAGE_NAME:${{ github.sha }}
