@@ -1,5 +1,7 @@
 package com.hurryhand.backend.controllers.REST;
 
+import com.hurryhand.backend.decorators.AddNewAdminDoc;
+import com.hurryhand.backend.decorators.AddNewUserDoc;
 import com.hurryhand.backend.dto.admin.CreateAdminDTO;
 import com.hurryhand.backend.dto.user.CreateUserDTO;
 import com.hurryhand.backend.services.AdminService;
@@ -22,6 +24,7 @@ public class AdminControllerREST {
     private final AdminService adminService;
 
     @PostMapping
+    @AddNewAdminDoc
     public ResponseEntity<Map<String, String>> addNewUser(@Valid @RequestBody CreateAdminDTO newAdminDTO){
 
         adminService.addNewAdmin(newAdminDTO);
