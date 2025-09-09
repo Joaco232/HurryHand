@@ -1,6 +1,5 @@
 package com.hurryhand.backend.config;
 
-
 import com.hurryhand.backend.auth.JwtAuthenticationFilter;
 import com.hurryhand.backend.mappers.BaseUserMapper;
 import com.hurryhand.backend.repositories.AdminRepository;
@@ -82,6 +81,4 @@ public class SecurityConfig {
         return http.build();
 
     }
-
-
 }
