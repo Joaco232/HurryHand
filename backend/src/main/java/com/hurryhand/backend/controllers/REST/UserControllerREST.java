@@ -1,19 +1,11 @@
 package com.hurryhand.backend.controllers.REST;
 
 
-import com.hurryhand.backend.decorators.AddNewUserDoc;
 import com.hurryhand.backend.decorators.GetUserByIdDoc;
-import com.hurryhand.backend.dto.ApiError;
 import com.hurryhand.backend.dto.user.CreateUserDTO;
 import com.hurryhand.backend.dto.user.UserResponseDTO;
 import com.hurryhand.backend.mappers.UserMapper;
 import com.hurryhand.backend.services.UserService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,7 +23,6 @@ public class UserControllerREST {
     private final UserMapper userMapper;
 
     @PostMapping()
-    @AddNewUserDoc
     public ResponseEntity<Map<String, String>> addNewUser(@Valid @RequestBody CreateUserDTO newUserDTO) {
 
         userService.addNewUser(newUserDTO);

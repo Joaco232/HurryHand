@@ -3,6 +3,7 @@ package com.hurryhand.backend.validations;
 
 import com.hurryhand.backend.exceptions.attribute.EmailAlreadyInUseException;
 import com.hurryhand.backend.exceptions.user.UnderAgeUserException;
+import com.hurryhand.backend.repositories.AdminRepository;
 import com.hurryhand.backend.repositories.UserRepository;
 import com.hurryhand.backend.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +17,12 @@ import java.time.Period;
 public class UserValidator {
 
     private final UserRepository userRepository;
+    private final AdminRepository adminRepository;
     private static final int MINIMUM_AGE = 18;
 
     public void validateUniqueEmail(String email) throws EmailAlreadyInUseException {
 
-        if (userRepository.existsUserByEmail(email)) {
+        if (userRepository.existsUserByEmail(email) || adminRepository.existsAdminByEmail(email)) {
             throw new EmailAlreadyInUseException("Ya existe una cuenta registrada con este email.");
         }
     }
@@ -32,9 +34,5 @@ public class UserValidator {
             throw new UnderAgeUserException("El usuario debe ser mayor de edad para registrarse (+18).");
         }
     }
-
-
-
-
 
 }
