@@ -1,6 +1,7 @@
 package com.hurryhand.backend.controllers.REST;
 
 
+import com.hurryhand.backend.decorators.AddNewUserDoc;
 import com.hurryhand.backend.decorators.GetUserByIdDoc;
 import com.hurryhand.backend.dto.user.CreateUserDTO;
 import com.hurryhand.backend.dto.user.UserResponseDTO;
@@ -23,6 +24,7 @@ public class UserControllerREST {
     private final UserMapper userMapper;
 
     @PostMapping()
+    @AddNewUserDoc
     public ResponseEntity<Map<String, String>> addNewUser(@Valid @RequestBody CreateUserDTO newUserDTO) {
 
         userService.addNewUser(newUserDTO);
