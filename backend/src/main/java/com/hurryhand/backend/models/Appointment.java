@@ -22,14 +22,10 @@ public class Appointment {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "PROVIDER_ID", nullable = false)
-    @NotNull(message = "El ID del proveedor no puede ser nulo.")
-    private Long providerId;
-
-    @Column(name = "SERVICE_ID", nullable = false)
+    @JoinColumn(name = "SERVICE_POST_ID", nullable = false)
     @NotNull(message = "El ID del servicio no puede ser nulo.")
     @ManyToOne
-    private ServicePost servicePostId;
+    private ServicePost servicePost;
 
     @Column(name = "DATE_TIME", nullable = false)
     @NotNull(message = "La fecha y hora no pueden ser nulas.")
@@ -40,13 +36,16 @@ public class Appointment {
     @NotNull(message = "El estado no puede ser nulo.")
     private String status;
 
-    @Column(name = "STATUS", nullable = false, length = 20)
+    @Column(name = "PAYMENT_STATUS", nullable = false, length = 20)
     @NotNull(message = "El estado del pago no puede ser nulo.")
     private String paymentStatus;
 
-    // validar si tiene que ser un usuario y un service post o si se guarda las id nomas
-    @ManyToOne //
+    @ManyToOne
+    @JoinColumn(name = "USER_ID", nullable = false)
     @NotNull(message = "El cliente no puede ser nulo.")
     private User cliente;
+
+    @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Review review;
 
 }

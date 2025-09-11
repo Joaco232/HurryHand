@@ -11,6 +11,9 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Table(name = "PROVIDERS")
@@ -35,5 +38,11 @@ public class Provider {
     @DecimalMin(value = "0.0", inclusive = true, message = "El rating no puede ser menor a 0.0")
     @DecimalMax(value = "5.0", inclusive = true, message = "El rating no puede ser mayor a 5.0")
     private BigDecimal rating;
+
+    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ServicePost> servicePosts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Credential> credential = new ArrayList<>();
 
 }
