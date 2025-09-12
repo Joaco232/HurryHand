@@ -30,6 +30,8 @@ public class UserControllerREST {
 
         userService.addNewUser(newUserDTO);
 
+        System.out.println("addNewUser ENTROOOOOOOOOOOOOOOOOOOOOOOOOO");
+
         Map<String, String> message = new HashMap<>();
         message.put("mensaje", "Usuario registrado exitosamente");
 
