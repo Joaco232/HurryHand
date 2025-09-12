@@ -9,7 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -59,9 +60,11 @@ public class ServicePost {
     private Location location;
 
     @Column(name = "CREATED_AT", nullable = false)
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Column(name = "UPDATED_AT", nullable = false)
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     @ElementCollection

@@ -7,8 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
-import javax.validation.constraints.NotNull;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
@@ -65,10 +66,11 @@ public class Credential {
     private LocalDateTime verifiedAt;
 
     @Column(name = "CREATED_AT", nullable = false)
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(name = "UPDATED_AT")
+    @Column(name = "UPDATED_AT", nullable = false)
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
-
 
 }

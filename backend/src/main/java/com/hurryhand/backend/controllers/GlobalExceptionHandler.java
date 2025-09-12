@@ -14,8 +14,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -34,6 +32,8 @@ public class GlobalExceptionHandler {
         return makeResponseEntity(status, status.getReasonPhrase(), ex.getMessage(), request.getRequestURI(), null);
     }
 
+
+    // Excepción al haber errores al validar con @Valid clases
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidationException(MethodArgumentNotValidException ex, HttpServletRequest request) {
 
@@ -45,6 +45,39 @@ public class GlobalExceptionHandler {
         return makeResponseEntity(HttpStatus.BAD_REQUEST, "Error de validación", "Error en la validación de campos", request.getRequestURI(), validationErrors);
     }
 
+    // Validaciones de jkarta
+    @ExceptionHandler(jakarta.validation.ConstraintViolationException.class)
+    public ResponseEntity<ApiError> handleConstraintViolationException(jakarta.validation.ConstraintViolationException ex, HttpServletRequest request) {
+
+        Map<String, String> validationErrors = new HashMap<>();
+        ex.getConstraintViolations().forEach(violation -> {
+            String field = violation.getPropertyPath().toString();
+            String message = violation.getMessage();
+            validationErrors.put(field, message);
+        });
+
+        return makeResponseEntity(
+                HttpStatus.BAD_REQUEST,
+                "Error de validación",
+                "Violaciones de restricciones en la entidad",
+                request.getRequestURI(),
+                validationErrors
+        );
+    }
+
+    @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+    public ResponseEntity<ApiError> handleDataIntegrityViolationException(org.springframework.dao.DataIntegrityViolationException ex, HttpServletRequest request) {
+
+        return makeResponseEntity(
+                HttpStatus.CONFLICT,
+                "Error de integridad de datos",
+                "La operación viola restricciones de la base de datos (ej. unique, foreign key, not null).",
+                request.getRequestURI(),
+                null
+        );
+    }
+
+    
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiError> handleAccessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
 
@@ -92,6 +125,18 @@ public class GlobalExceptionHandler {
         }
 
         return makeResponseEntity(HttpStatus.BAD_REQUEST, "Error de conversión", message, request.getRequestURI(), validationErrors);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiError> handleGenericException(Exception ex, HttpServletRequest request) {
+
+        return makeResponseEntity(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Error interno del servidor",
+                ex.getMessage() != null ? ex.getMessage() : "Ha ocurrido un error inesperado",
+                request.getRequestURI(),
+                null
+        );
     }
 
 

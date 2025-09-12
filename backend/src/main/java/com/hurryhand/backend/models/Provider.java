@@ -9,9 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,10 +37,10 @@ public class Provider {
     @DecimalMax(value = "5.0", inclusive = true, message = "El rating no puede ser mayor a 5.0")
     private BigDecimal rating;
 
-    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ServicePost> servicePosts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Credential> credential = new ArrayList<>();
+    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Credential> credentials = new ArrayList<>();
 
 }

@@ -8,12 +8,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
-import javax.validation.constraints.NotNull;
+import org.hibernate.annotations.UpdateTimestamp;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Getter
 @Setter
@@ -47,8 +46,12 @@ public class Review {
     @DecimalMax(value = "5.0", inclusive = true, message = "El rating no puede ser mayor a 5.0")
     private BigDecimal rating;
 
+    @Column(name = "UPDATED_AT", nullable = false)
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
     @Column(name = "SENT_AT", nullable = false)
-    @NotNull(message = "La fecha de creacion no puede estar vacia")
+    @NotNull(message = "La fecha de creación no puede estar vacía")
     private LocalDateTime sentAt;
 
 }

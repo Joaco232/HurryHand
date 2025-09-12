@@ -7,6 +7,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +19,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class Appointment {
 
     @Id
@@ -38,6 +41,14 @@ public class Appointment {
     @Column(name = "STATUS", nullable = false, length = 20)
     @NotNull(message = "El estado no puede ser nulo.")
     private AppointmentStatus status;
+
+    @Column(name = "CREATED_AT", nullable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Column(name = "UPDATED_AT", nullable = false)
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "PAYMENT_STATUS", nullable = false, length = 20)
