@@ -34,7 +34,7 @@ public abstract class BaseUser {
     private Long id;
 
     @Column(name = "PHONE", unique = true)
-
+    @NotNull(message = "El numero de telefono no puede ser nulo.")
     private String phone;
 
     @Column(name = "EMAIL", unique = true, nullable = false)

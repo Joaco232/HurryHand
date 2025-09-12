@@ -10,6 +10,12 @@ public interface ProviderRepository extends JpaRepository<Provider, Long> {
 
     Optional<Provider> findProviderById(Long id);
 
+    Optional<Provider> findProviderByUserId(Long id);
+
+
+
+
+
 
 
 

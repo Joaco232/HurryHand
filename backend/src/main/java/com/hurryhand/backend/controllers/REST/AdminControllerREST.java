@@ -24,7 +24,7 @@ public class AdminControllerREST {
 
     private final AdminService adminService;
 
-    @PostMapping
+    @PostMapping()
     @AddNewAdminDoc
     public ResponseEntity<Map<String, String>> addNewUser(@Valid @RequestBody CreateAdminDTO newAdminDTO){
 

@@ -61,4 +61,6 @@ public class UserService {
 
         return userRepository.findUserById(id).orElseThrow(() -> new UserNotFoundException("El usuario no existe"));
     }
+
+
 }
