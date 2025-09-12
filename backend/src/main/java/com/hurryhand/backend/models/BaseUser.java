@@ -33,6 +33,10 @@ public abstract class BaseUser {
     @Column(name = "ID",unique = true, nullable = false)
     private Long id;
 
+    @Column(name = "PHONE", unique = true)
+
+    private String phone;
+
     @Column(name = "EMAIL", unique = true, nullable = false)
     @NotNull(message = "El email no puede ser nulo.")
     @Email(message = "Formato de email no valido.")
