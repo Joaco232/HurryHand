@@ -1,6 +1,8 @@
 package com.hurryhand.backend.models;
 
 
+import com.hurryhand.backend.enums.AppointmentStatus;
+import com.hurryhand.backend.enums.PaymentStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
@@ -34,11 +36,11 @@ public class Appointment {
 
     @Column(name = "STATUS", nullable = false, length = 20)
     @NotNull(message = "El estado no puede ser nulo.")
-    private String status;
+    private AppointmentStatus status;
 
     @Column(name = "PAYMENT_STATUS", nullable = false, length = 20)
     @NotNull(message = "El estado del pago no puede ser nulo.")
-    private String paymentStatus;
+    private PaymentStatus paymentStatus;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID", nullable = false)

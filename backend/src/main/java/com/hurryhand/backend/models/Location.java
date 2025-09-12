@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -33,10 +34,12 @@ public class Location {
     @Column(name = "STREET")
     private String street;
 
-    @Column(name = "STREET_NUMBER") //HAY QUE CHEQUEAR QUE NO SEA NEGATIVO NO ME DEJA USAR FUNCION MIN
+    @Column(name = "STREET_NUMBER")
+    @Min(value = 0, message = "El numero de calle no puede ser negativo.")
     private Integer streetNumber;
 
-    @Column(name = "POSTAL_CODE") //LO MISMO ACA CON QUE NO PUEDE HABER NEGATIVOS
+    @Column(name = "POSTAL_CODE")
+    @Min(value = 0, message = "El codigo postal no puede ser negativo.")
     private Integer postalCode;
 
     @Column(name = "APTO_NUMBER")
