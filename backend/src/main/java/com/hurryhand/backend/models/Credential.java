@@ -2,6 +2,7 @@ package com.hurryhand.backend.models;
 
 import com.hurryhand.backend.enums.CredentialStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,8 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import jakarta.validation.constraints.NotNull;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -31,26 +34,24 @@ public class Credential {
     @NotNull(message = "La credencial debe pertenecer a un proveedor")
     private Provider provider;
 
-    @Column(name = "TYPE", nullable = false, length = 50)
-    @NotNull(message = "El tipo de credencial no puede ser nulo")
-    private String type;
-
     @Column(name = "ISSUER", nullable = false, length = 100)
     @NotNull(message = "El emisor no puede ser nulo")
     private String issuer;
 
-    @Column(name = "CREDENTIAL_CODE", nullable = false, length = 100, unique = true)
-    @NotNull(message = "El código de credencial no puede ser nulo")
-    private String credentialCode;
-
     @Column(name = "DESCRIPTION", length = 255)
     private String description;
 
-    @Column(name = "ISSUED_AT", nullable = false)
-    private LocalDateTime issuedAt;
-
     @Column(name = "VALID_UNTIL")
-    private LocalDateTime validUntil;
+    private LocalDate validUntil;
+
+    @Column(name = "ISSUED_AT", nullable = false)
+    private LocalDate issuedAt;
+
+    @Column(name = "STARTED_DATE")
+    private LocalDate startedAt;
+
+    @Column(name = "completion date")
+    private LocalDate completedAt;
 
     @Column(name = "DOCUMENT_URL", length = 255)
     private String documentUrl;

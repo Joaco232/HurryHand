@@ -27,7 +27,6 @@ public class ProviderControllerREST {
     private final UserService userService;
 
     @PostMapping()
-    @AddNewUserDoc
     public ResponseEntity<Map<String, String>> setUserAsProvider(@Valid @RequestBody CreateProviderDTO newProviderDTO) {
 
         User user = userService.getUserById(newProviderDTO.getUserId());
@@ -39,8 +38,6 @@ public class ProviderControllerREST {
         message.put("mensaje", "Se ha registrado el usuario como provider exitosamente");
 
         return new ResponseEntity<>(message, HttpStatus.OK);
-
-
     }
 
 
