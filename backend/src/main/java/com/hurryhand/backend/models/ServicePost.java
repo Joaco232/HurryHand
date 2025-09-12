@@ -13,8 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 @Table(name = "SERVICE_POSTS")
@@ -77,5 +76,22 @@ public class ServicePost {
 
     @OneToMany(mappedBy = "servicePost", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Appointment> appointments = new ArrayList<>();
+
+
+    public void updateRating() {
+
+        if (appointments.isEmpty()) {
+            this.rating = null;
+            return;
+        }
+
+        OptionalDouble OptAverageRating = this.appointments.stream()
+                .map(appointment -> appointment.getReview().getRating())
+                .filter(valor -> valor != null)
+                .mapToDouble(value -> value.doubleValue())
+                .average();
+
+        this.rating = OptAverageRating.isPresent() ? BigDecimal.valueOf(OptAverageRating.getAsDouble()) : null;
+    }
 
 }

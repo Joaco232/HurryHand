@@ -12,6 +12,7 @@ import lombok.experimental.SuperBuilder;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalDouble;
 
 
 @Table(name = "PROVIDERS")
@@ -42,5 +43,22 @@ public class Provider {
 
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Credential> credentials = new ArrayList<>();
+
+
+    public void updateRating() {
+
+        if (servicePosts.isEmpty()) {
+            this.rating = null;
+            return;
+        }
+
+        OptionalDouble OptAverageRating = this.servicePosts.stream()
+                .map(servicePost -> servicePost.getRating())
+                .filter(rating -> rating != null)
+                .mapToDouble(rating -> rating.doubleValue())
+                .average();
+
+        this.rating = OptAverageRating.isPresent() ? BigDecimal.valueOf(OptAverageRating.getAsDouble()) : null;
+    }
 
 }

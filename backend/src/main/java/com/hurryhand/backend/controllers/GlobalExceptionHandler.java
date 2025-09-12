@@ -77,7 +77,7 @@ public class GlobalExceptionHandler {
         );
     }
 
-    
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiError> handleAccessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
 
