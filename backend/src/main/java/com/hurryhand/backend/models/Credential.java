@@ -1,5 +1,6 @@
 package com.hurryhand.backend.models;
 
+import com.hurryhand.backend.enums.CredentialStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -53,8 +54,9 @@ public class Credential {
     @Column(name = "DOCUMENT_URL", length = 255)
     private String documentUrl;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "STATUS", nullable = false, length = 30)
-    private String status;
+    private CredentialStatus credentialStatus;
 
     @Column(name = "VERIFIED_BY", length = 100)
     private String verifiedBy;

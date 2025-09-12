@@ -34,10 +34,12 @@ public class Appointment {
     @FutureOrPresent(message = "La fecha debe estar en el presente o futuro.")
     private LocalDateTime dateTime;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "STATUS", nullable = false, length = 20)
     @NotNull(message = "El estado no puede ser nulo.")
     private AppointmentStatus status;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "PAYMENT_STATUS", nullable = false, length = 20)
     @NotNull(message = "El estado del pago no puede ser nulo.")
     private PaymentStatus paymentStatus;
