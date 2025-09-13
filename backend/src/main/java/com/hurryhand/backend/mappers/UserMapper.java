@@ -19,6 +19,7 @@ public class UserMapper {
                 .password(encodedPassword)
                 .personalIdType(dto.getPersonalIdType())
                 .personalId(dto.getPersonalId())
+                .phoneNumber(dto.getPhoneNumber())
                 .build();
     }
 
@@ -35,6 +36,7 @@ public class UserMapper {
                 .personalIdType(user.getPersonalIdType())
                 .location(user.getLocation())
                 .createdAt(user.getCreatedAt())
+                .phoneNumber(user.getPhoneNumber())
                 .build();
     }
 

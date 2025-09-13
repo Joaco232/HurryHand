@@ -33,9 +33,11 @@ public abstract class BaseUser {
     @Column(name = "ID",unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "PHONE", unique = true)
-    @NotNull(message = "El numero de telefono no puede ser nulo.")
-    private String phone;
+    @Column(name = "PHONE_NUMBER", unique = true)
+    @NotNull(message = "El número de teléfono no puede ser nulo.")
+    @Pattern(regexp = "^\\+?[0-9]+$\n",
+            message = "El número de teléfono solo puede llevar números y un +.")
+    private String phoneNumber;
 
     @Column(name = "EMAIL", unique = true, nullable = false)
     @NotNull(message = "El email no puede ser nulo.")

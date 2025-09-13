@@ -2,10 +2,10 @@ package com.hurryhand.backend.validations;
 
 
 import com.hurryhand.backend.exceptions.attribute.EmailAlreadyInUseException;
+import com.hurryhand.backend.exceptions.attribute.PhoneNumberAlreadyInUseException;
 import com.hurryhand.backend.exceptions.user.UnderAgeUserException;
 import com.hurryhand.backend.repositories.AdminRepository;
 import com.hurryhand.backend.repositories.UserRepository;
-import com.hurryhand.backend.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +32,13 @@ public class UserValidator {
         int age = Period.between(birthdate, LocalDate.now()).getYears();
         if (age < MINIMUM_AGE) {
             throw new UnderAgeUserException("El usuario debe ser mayor de edad para registrarse (+18).");
+        }
+    }
+
+    public void validateUniquePhoneNumber(String phoneNumber)  {
+
+        if (userRepository.existsUserByPhoneNumber(phoneNumber)) {
+            throw new PhoneNumberAlreadyInUseException("Ya existe una cuenta registrada con este número de teléfono.");
         }
     }
 

@@ -30,10 +30,13 @@ public class UserService {
     private final UserMapper userMapper;
 
     @Transactional
-    public User addNewUser(@Valid CreateUserDTO createUserDTO) throws UnderAgeUserException, EmailAlreadyInUseException {
+    public User addNewUser(@Valid CreateUserDTO createUserDTO) throws UnderAgeUserException,
+                                                                        EmailAlreadyInUseException,
+                                                                        UserNotFoundException {
 
         userValidator.validateUniqueEmail(createUserDTO.getEmail());
         userValidator.validateUserAge(createUserDTO.getBirthdate());
+        userValidator.validateUniquePhoneNumber(createUserDTO.getPhoneNumber());
 
         String encodedPassword = passwordEncoder.encode(createUserDTO.getPassword());
         User newUser = userMapper.toEntity(createUserDTO,  encodedPassword);
@@ -44,6 +47,7 @@ public class UserService {
 
         return userRepository.save(newUser);
     }
+
 
 
     public boolean existsUserByEmail(String email) {
