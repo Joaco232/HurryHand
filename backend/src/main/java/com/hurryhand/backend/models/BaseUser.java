@@ -35,7 +35,7 @@ public abstract class BaseUser {
 
     @Column(name = "PHONE_NUMBER", unique = true)
     @NotNull(message = "El número de teléfono no puede ser nulo.")
-    @Pattern(regexp = "^\\+?[0-9]+$\n",
+    @Pattern(regexp = "^\\+?[0-9]+$",
             message = "El número de teléfono solo puede llevar números y un +.")
     private String phoneNumber;
 
