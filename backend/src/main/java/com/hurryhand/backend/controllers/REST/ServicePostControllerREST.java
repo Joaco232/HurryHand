@@ -33,7 +33,7 @@ public class ServicePostControllerREST {
     @PreAuthorize("hasRole('PROVIDER')")
     public ResponseEntity<Map<String, String>> addNewUser(@Valid @RequestBody CreateServicePostDTO createServicePostDTO,
                                                           @AuthenticationPrincipal CustomUserDetails user) {
-        
+
         Provider provider = providerService.getProviderByUser(userService.getUserById(user.getId()));
 
         servicePostService.createServicePost(createServicePostDTO, provider);
