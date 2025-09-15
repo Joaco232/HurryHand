@@ -30,7 +30,6 @@ import java.lang.annotation.Target;
                         mediaType = "application/json",
                         schema = @Schema(implementation = UserResponseDTO.class)
                 )),
-        @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
         @ApiResponse(
                 responseCode = "404",
                 description = "Usuario no encontrado",

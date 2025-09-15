@@ -1,6 +1,7 @@
 package com.hurryhand.backend.controllers.REST;
 
 
+import com.hurryhand.backend.decorators.SetUserAsProviderDoc;
 import com.hurryhand.backend.models.User;
 import com.hurryhand.backend.security.CustomUserDetails;
 import com.hurryhand.backend.services.ProviderService;
@@ -26,6 +27,7 @@ public class ProviderControllerREST {
 
     @PostMapping()
     @PreAuthorize("hasRole('USER')")
+    @SetUserAsProviderDoc
     public ResponseEntity<Map<String, String>> setUserAsProvider(@AuthenticationPrincipal CustomUserDetails user) {
 
         User userToSet = userService.getUserById(user.getId());
