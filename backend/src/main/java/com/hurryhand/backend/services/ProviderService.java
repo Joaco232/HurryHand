@@ -6,11 +6,13 @@ import com.hurryhand.backend.exceptions.provider.UserAlreadyProviderException;
 import com.hurryhand.backend.models.Provider;
 import com.hurryhand.backend.models.User;
 import com.hurryhand.backend.repositories.ProviderRepository;
+import com.hurryhand.backend.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,6 +20,7 @@ import java.util.Optional;
 public class ProviderService {
 
     private final ProviderRepository providerRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Provider setUserAsProvider(User user) throws UserAlreadyProviderException {
@@ -35,6 +38,11 @@ public class ProviderService {
         }
 
         Provider newProvider = Provider.builder().user(user).build();
+
+        List<Role> roles = user.getRoles();
+        roles.add(Role.ROLE_PROVIDER);
+        user.setRoles(roles);
+        userRepository.save(user);
 
         return providerRepository.save(newProvider);
     }

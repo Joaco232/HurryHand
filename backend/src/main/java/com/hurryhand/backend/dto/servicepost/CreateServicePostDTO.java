@@ -50,7 +50,5 @@ public class CreateServicePostDTO {
     @NotNull(message = "Debe tener un lista de fotos.")
     private List<String> photosURLs = new ArrayList<>();
 
-    @NotNull(message = "Debe tener un lista de reservas.")
-    private List<Appointment> appointments = new ArrayList<>();
 
 }
