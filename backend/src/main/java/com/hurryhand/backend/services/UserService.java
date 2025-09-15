@@ -2,6 +2,7 @@ package com.hurryhand.backend.services;
 
 
 import com.hurryhand.backend.dto.user.CreateUserDTO;
+import com.hurryhand.backend.dto.user.UserResponseDTO;
 import com.hurryhand.backend.enums.Role;
 import com.hurryhand.backend.exceptions.attribute.EmailAlreadyInUseException;
 import com.hurryhand.backend.exceptions.user.UnderAgeUserException;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -61,10 +63,26 @@ public class UserService {
     }
 
 
+    public UserResponseDTO getUserByIdForResponse(Long id) throws UserNotFoundException {
+
+        User user = userRepository.findUserById(id).orElseThrow(() -> new UserNotFoundException("El usuario no existe"));
+
+        return userMapper.toUserResponseDTO(user);
+    }
+
     public User getUserById(Long id) throws UserNotFoundException {
 
         return userRepository.findUserById(id).orElseThrow(() -> new UserNotFoundException("El usuario no existe"));
     }
+
+    public List<UserResponseDTO> getAllUsersForResponse() {
+
+        List<User> users = userRepository.findAll();
+
+        return users.stream().map(user -> userMapper.toUserResponseDTO(user)).toList();
+    }
+
+
 
 
 }

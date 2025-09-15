@@ -1,20 +1,19 @@
 package com.hurryhand.backend.dto.provider;
 
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateProviderDTO {
+public class ProviderResponseDTO {
 
-    @NotNull(message = "El id del usuario no puede ser nula")
-    private Long userId;
-
+    private BigDecimal rating;
 
 }

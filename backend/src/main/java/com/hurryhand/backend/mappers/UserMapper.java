@@ -4,10 +4,15 @@ package com.hurryhand.backend.mappers;
 import com.hurryhand.backend.dto.user.CreateUserDTO;
 import com.hurryhand.backend.dto.user.UserResponseDTO;
 import com.hurryhand.backend.models.User;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class UserMapper {
+
+    private final ProviderMapper providerMapper;
 
     public User toEntity(CreateUserDTO dto, String encodedPassword) {
 
@@ -37,6 +42,7 @@ public class UserMapper {
                 .location(user.getLocation())
                 .createdAt(user.getCreatedAt())
                 .phoneNumber(user.getPhoneNumber())
+                .provider(user.getProvider() != null ? providerMapper.toProviderResponseDTO(user.getProvider()): null)
                 .build();
     }
 

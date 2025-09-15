@@ -1,6 +1,7 @@
 package com.hurryhand.backend.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hurryhand.backend.dto.provider.ProviderResponseDTO;
 import com.hurryhand.backend.enums.PersonalIdType;
 import com.hurryhand.backend.models.Location;
 import lombok.AllArgsConstructor;
@@ -39,6 +40,8 @@ public class UserResponseDTO {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
+
+    private ProviderResponseDTO provider;
 
 
 }

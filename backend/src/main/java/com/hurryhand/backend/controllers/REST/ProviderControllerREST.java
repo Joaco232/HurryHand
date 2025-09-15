@@ -1,17 +1,15 @@
 package com.hurryhand.backend.controllers.REST;
 
 
-import com.hurryhand.backend.decorators.AddNewUserDoc;
-import com.hurryhand.backend.dto.provider.CreateProviderDTO;
-import com.hurryhand.backend.dto.user.CreateUserDTO;
 import com.hurryhand.backend.models.User;
+import com.hurryhand.backend.security.CustomUserDetails;
 import com.hurryhand.backend.services.ProviderService;
 import com.hurryhand.backend.services.UserService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -27,11 +25,12 @@ public class ProviderControllerREST {
     private final UserService userService;
 
     @PostMapping()
-    public ResponseEntity<Map<String, String>> setUserAsProvider(@Valid @RequestBody CreateProviderDTO newProviderDTO) {
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Map<String, String>> setUserAsProvider(@AuthenticationPrincipal CustomUserDetails user) {
 
-        User user = userService.getUserById(newProviderDTO.getUserId());
+        User userToSet = userService.getUserById(user.getId());
 
-        providerService.setUserAsProvider(user);
+        providerService.setUserAsProvider(userToSet);
 
 
         Map<String, String> message = new HashMap<>();
@@ -39,6 +38,8 @@ public class ProviderControllerREST {
 
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
+
+
 
 
 

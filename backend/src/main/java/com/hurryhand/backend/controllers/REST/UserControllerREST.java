@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -44,6 +45,14 @@ public class UserControllerREST {
 
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+
+        return new ResponseEntity<>(userService.getAllUsersForResponse(), HttpStatus.OK);
+    }
+
+
 
 
 
