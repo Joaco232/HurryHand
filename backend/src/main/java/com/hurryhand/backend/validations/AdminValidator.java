@@ -10,8 +10,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AdminValidator {
 
-
-
     private final AdminRepository adminRepository;
     private final UserRepository userRepository;
 

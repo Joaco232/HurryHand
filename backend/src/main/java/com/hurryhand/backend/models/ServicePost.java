@@ -55,7 +55,7 @@ public class ServicePost {
     private Integer price;
 
     @Embedded
-    @NotNull(message = "La ubicacion no puede ser nula")
+    @NotNull(message = "La ubicación no puede ser nula")
     private Location location;
 
     @Column(name = "CREATED_AT", nullable = false)
@@ -74,9 +74,16 @@ public class ServicePost {
     @Column(name = "DATE_TIME", nullable = false)
     private List<LocalDateTime> availableDates = new ArrayList<>();
 
+    @ElementCollection
+    @CollectionTable(
+            name = "SERVICE_POST_PHOTOS",
+            joinColumns = @JoinColumn(name = "SERVICE_POST_ID")
+    )
+    @Column(name = "PHOTO_URL", length = 500, nullable = false)
+    private List<String> photosURLs = new ArrayList<>();
+
     @OneToMany(mappedBy = "servicePost", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Appointment> appointments = new ArrayList<>();
-
 
     public void updateRating() {
 

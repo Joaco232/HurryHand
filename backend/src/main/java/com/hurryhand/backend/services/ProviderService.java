@@ -1,12 +1,14 @@
 package com.hurryhand.backend.services;
 
 import com.hurryhand.backend.enums.Role;
-import com.hurryhand.backend.exceptions.Provider.UserAlreadyProviderException;
+import com.hurryhand.backend.exceptions.provider.ProviderNotFoundException;
+import com.hurryhand.backend.exceptions.provider.UserAlreadyProviderException;
 import com.hurryhand.backend.models.Provider;
 import com.hurryhand.backend.models.User;
 import com.hurryhand.backend.repositories.ProviderRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -35,6 +37,13 @@ public class ProviderService {
         Provider newProvider = Provider.builder().user(user).build();
 
         return providerRepository.save(newProvider);
+    }
+
+
+    public Provider getProviderByUser(User user) throws ProviderNotFoundException {
+
+        return providerRepository.findProviderByUserId(user.getId())
+                .orElseThrow(() -> new ProviderNotFoundException("No se encontró el provider."));
     }
 
 

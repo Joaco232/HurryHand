@@ -1,5 +1,6 @@
 package com.hurryhand.backend.repositories;
 
+import com.hurryhand.backend.models.Provider;
 import com.hurryhand.backend.models.ServicePost;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,5 +10,9 @@ public interface ServicePostRepository extends JpaRepository<ServicePost, Long> 
 
 
     Optional<ServicePost> findServicePostById(Long id);
+
+    Optional<ServicePost> findServicePostByTitleAndProvider(String title,  Provider provider);
+
+    boolean existsServicePostByTitleAndProvider(String title,  Provider provider);
 
 }

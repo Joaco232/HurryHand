@@ -1,0 +1,56 @@
+package com.hurryhand.backend.dto.servicepost;
+
+
+import com.hurryhand.backend.models.Appointment;
+import com.hurryhand.backend.models.Location;
+import com.hurryhand.backend.models.Provider;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.OptionalDouble;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class CreateServicePostDTO {
+
+    @NotNull(message = "El titulo no puede ser nulo.")
+    @Size(min = 4, max = 150, message = "El titulo debe contener entre 4 y 150 caracteres.")
+    @Pattern(regexp = "^[a-zA-Z0-9áéíóúÁÉÍÓÚüÜñÑ\\s'\\-]*$", message = "El titulo solo puede contener letras, números y espacios.")
+    private String title;
+
+    @NotNull(message = "La descripción no puede ser nula.")
+    @Size(min = 4, max = 1000, message = "La descripción debe contener entre 4 y 1000 caracteres.")
+    @Pattern(regexp = "^[a-zA-Z0-9áéíóúÁÉÍÓÚüÜñÑ\\s'\\-]*$", message = "La descripción solo puede contener letras, números y espacios.")
+    private String description;
+
+    @NotNull(message = "El precio no puede ser nulo")
+    private Integer price;
+
+    @NotNull(message = "La ubicación no puede ser nula")
+    private Location location;
+
+    @NotNull(message = "Debe tener un lista de fechas disponibles.")
+    private List<LocalDateTime> availableDates = new ArrayList<>();
+
+    @NotNull(message = "Debe tener un lista de fotos.")
+    private List<String> photosURLs = new ArrayList<>();
+
+    @NotNull(message = "Debe tener un lista de reservas.")
+    private List<Appointment> appointments = new ArrayList<>();
+
+}
