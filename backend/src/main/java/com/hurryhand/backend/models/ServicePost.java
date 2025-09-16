@@ -13,6 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.Duration;
 import java.util.*;
 
 
@@ -47,15 +48,18 @@ public class ServicePost {
 
     @ManyToOne
     @JoinColumn(name = "PROVIDER_ID", nullable = false)
-    @NotNull(message = "El servicio debe pertenecer a un proveedor")
+    @NotNull(message = "El servicio debe pertenecer a un proveedor.")
     private Provider provider;
 
     @Column(name = "PRICE", nullable = false)
-    @NotNull(message = "El precio no puede ser nulo")
+    @NotNull(message = "El precio no puede ser nulo.")
     private Integer price;
 
+    @Column(name = "DURATION", nullable = false)
+    @NotNull(message = "Debe ingresar la duración del servicio.")
+    private Duration duration;
+
     @Embedded
-    @NotNull(message = "La ubicación no puede ser nula")
     private Location location;
 
     @Column(name = "CREATED_AT", nullable = false)

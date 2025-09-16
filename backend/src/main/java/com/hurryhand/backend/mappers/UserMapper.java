@@ -3,6 +3,7 @@ package com.hurryhand.backend.mappers;
 
 import com.hurryhand.backend.dto.user.CreateUserDTO;
 import com.hurryhand.backend.dto.user.UserResponseDTO;
+import com.hurryhand.backend.exceptions.attribute.NullValueForMapperException;
 import com.hurryhand.backend.models.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +16,11 @@ public class UserMapper {
     private final ProviderMapper providerMapper;
 
     public User toEntity(CreateUserDTO dto, String encodedPassword) {
+
+        if (dto == null || encodedPassword == null) {
+            throw new NullValueForMapperException("Dto o Password es null");
+
+        }
 
         return User.builder()
                 .email(dto.getEmail())
@@ -29,6 +35,11 @@ public class UserMapper {
     }
 
     public UserResponseDTO toUserResponseDTO(User user) {
+
+        if (user == null) {
+            throw new NullValueForMapperException("User es null.");
+
+        }
 
         return UserResponseDTO.builder()
                 .id(user.getId())

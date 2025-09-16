@@ -2,6 +2,8 @@ package com.hurryhand.backend.controllers.REST;
 
 
 import com.hurryhand.backend.dto.servicepost.CreateServicePostDTO;
+import com.hurryhand.backend.dto.servicepost.GetServicePostParamsDTO;
+import com.hurryhand.backend.dto.servicepost.ServicePostForVisualDTO;
 import com.hurryhand.backend.models.Provider;
 import com.hurryhand.backend.security.CustomUserDetails;
 import com.hurryhand.backend.services.ProviderService;
@@ -9,6 +11,7 @@ import com.hurryhand.backend.services.ServicePostService;
 import com.hurryhand.backend.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +19,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -43,6 +47,20 @@ public class ServicePostControllerREST {
 
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<Page<ServicePostForVisualDTO>>  getAllServicePostsForVisual(@Valid @RequestBody GetServicePostParamsDTO  getServicePostParamsDTO) {
+
+        Page<ServicePostForVisualDTO> pageOfServicePosts = servicePostService.getPostsForVisual(getServicePostParamsDTO.getPage(),
+                getServicePostParamsDTO.getSize(),
+                getServicePostParamsDTO.getSortBy(),
+                getServicePostParamsDTO.getDirection(),
+                getServicePostParamsDTO.getQuery());
+
+        return new ResponseEntity<>(pageOfServicePosts, HttpStatus.OK);
+
+    }
+
 
 
 }
