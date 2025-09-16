@@ -29,6 +29,9 @@ public class Credential {
     @Column(name = "ID", unique = true, nullable = false)
     private Long id;
 
+    @NotNull(message = "El nombre no puede ser nulo")
+    private String name;
+
     @ManyToOne
     @JoinColumn(name = "PROVIDER_ID", nullable = false)
     @NotNull(message = "La credencial debe pertenecer a un proveedor")
@@ -42,22 +45,25 @@ public class Credential {
     private String description;
 
     @Column(name = "VALID_UNTIL")
+    @Future(message = "La fecha de vaildez debe de estar en futuro")
     private LocalDate validUntil;
 
     @Column(name = "ISSUED_AT", nullable = false)
+    @NotNull(message = "La fecha de emision no puede ser nula")
     private LocalDate issuedAt;
 
     @Column(name = "STARTED_DATE")
     private LocalDate startedAt;
 
-    @Column(name = "completion date")
+    @Column(name = "COMPLETED_AT")
     private LocalDate completedAt;
 
-    @Column(name = "DOCUMENT_URL", length = 255)
-    private String documentUrl;
+    @Column(name = "CERTIFICATE_URL", length = 255, nullable = false)
+    private String certificateUrl;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS", nullable = false, length = 30)
+    @NotNull(message = "El estado de la credencial no puede ser nulo")
     private CredentialStatus credentialStatus;
 
     @Column(name = "VERIFIED_BY", length = 100)
@@ -73,5 +79,7 @@ public class Credential {
     @Column(name = "UPDATED_AT", nullable = false)
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+
 
 }
