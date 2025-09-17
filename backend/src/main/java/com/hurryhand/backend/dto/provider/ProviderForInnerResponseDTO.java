@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProviderResponseDTO {
+public class ProviderForInnerResponseDTO {
 
     private BigDecimal rating;
 

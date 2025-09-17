@@ -2,10 +2,12 @@ package com.hurryhand.backend.dto.credential;
 
 import com.hurryhand.backend.enums.CredentialStatus;
 import jakarta.validation.constraints.NotNull;
+import jdk.jfr.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 
@@ -13,13 +15,10 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CredentialDTO {
+public class CreateCredentialDTO {
 
     @NotNull(message = "El nombre no puede ser nulo")
     private String name;
-
-    @NotNull(message = "El providerId no puede ser nulo")
-    private Long providerId;
 
     @NotNull(message = "El emisor no puede ser nulo")
     private String issuer;
@@ -36,7 +35,7 @@ public class CredentialDTO {
     private LocalDate completedAt;
 
     @NotNull(message = "La URL del documento no puede ser nula")
-    private String documentUrl;
+    private String certificateUrl;
 
     @NotNull(message = "El estado de la credencial no puede ser nulo")
     private CredentialStatus credentialStatus;
