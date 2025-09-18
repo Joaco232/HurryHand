@@ -2,13 +2,15 @@ package com.hurryhand.backend.dto.credential;
 
 import com.hurryhand.backend.enums.CredentialStatus;
 import com.hurryhand.backend.models.Provider;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Builder
+@Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class CredentialResponseDTO {
     private Long id;
@@ -19,7 +21,7 @@ public class CredentialResponseDTO {
     private LocalDate issuedAt;
     private LocalDate startedAt;
     private LocalDate completedAt;
-    private String documentUrl;
+    private String certificateUrl;
     private CredentialStatus credentialStatus;
     private String verifiedBy;
     private LocalDateTime verifiedAt;

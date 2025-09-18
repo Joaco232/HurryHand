@@ -25,6 +25,7 @@ public class CredentialMappper {
             .completedAt(dto.getCompletedAt())
             .credentialStatus(dto.getCredentialStatus())
             .certificateUrl(dto.getCertificateUrl())
+            .provider(provider)
             .build();
         }
 
@@ -42,7 +43,7 @@ public class CredentialMappper {
         .startedAt(credential.getStartedAt())
         .completedAt(credential.getCompletedAt())
         .credentialStatus(credential.getCredentialStatus())
-        .documentUrl(credential.getCertificateUrl())
+        .certificateUrl(credential.getCertificateUrl())
         .verifiedBy(credential.getVerifiedBy())
         .verifiedAt(credential.getVerifiedAt())
         .createdAt(credential.getCreatedAt())
