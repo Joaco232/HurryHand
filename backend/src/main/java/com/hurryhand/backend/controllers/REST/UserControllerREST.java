@@ -39,13 +39,20 @@ public class UserControllerREST {
 
     @GetMapping("/{id}")
     @GetUserByIdDoc
-    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDTO> getUserByIdForResponse(@PathVariable Long id) {
 
-        UserResponseDTO userDTO = userMapper.toUserResponseDTO(userService.getUserById(id));
+        UserResponseDTO userDTO = userService.getUserByIdForResponse(id);
 
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
+    @GetMapping("/{email}")
+    public ResponseEntity<UserResponseDTO> getUserByEmailForResponse(@PathVariable String email) {
+
+        UserResponseDTO userDTO = userService.getUserByEmailForResponse(email);
+
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
     @GetMapping("/all")
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
 

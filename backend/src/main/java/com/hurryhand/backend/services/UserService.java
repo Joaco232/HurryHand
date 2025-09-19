@@ -70,6 +70,14 @@ public class UserService {
         return userMapper.toUserResponseDTO(user);
     }
 
+    public UserResponseDTO getUserByEmailForResponse(String email) throws UserNotFoundException {
+
+        User user = userRepository.findUserByEmail(email).orElseThrow(() -> new UserNotFoundException("El usuario no existe"));
+
+        return userMapper.toUserResponseDTO(user);
+    }
+
+
     public User getUserById(Long id) throws UserNotFoundException {
 
         return userRepository.findUserById(id).orElseThrow(() -> new UserNotFoundException("El usuario no existe"));

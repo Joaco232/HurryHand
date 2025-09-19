@@ -23,7 +23,7 @@ public class CreateUserDTO {
     private String email;
 
     @NotNull(message = "El numero de teléfono no puede ser nulo.")
-    @Pattern(regexp = "^\\+?[0-9]+$",
+    @Pattern(regexp = "^\\+?[0-9]+$\n",
             message = "El número de teléfono solo puede llevar números y un +.")
     private String phoneNumber;
 
