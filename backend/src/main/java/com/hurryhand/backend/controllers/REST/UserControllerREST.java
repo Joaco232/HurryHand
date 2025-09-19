@@ -37,7 +37,7 @@ public class UserControllerREST {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     @GetUserByIdDoc
     public ResponseEntity<UserResponseDTO> getUserByIdForResponse(@PathVariable Long id) {
 
@@ -46,7 +46,7 @@ public class UserControllerREST {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/email/{email}")
     public ResponseEntity<UserResponseDTO> getUserByEmailForResponse(@PathVariable String email) {
 
         UserResponseDTO userDTO = userService.getUserByEmailForResponse(email);
