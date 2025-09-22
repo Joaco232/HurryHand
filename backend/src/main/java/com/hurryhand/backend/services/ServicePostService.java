@@ -40,7 +40,6 @@ public class ServicePostService {
 
     public ServicePost getServicePostById(long id) throws ServicePostNotFoundException {
 
-
         return servicePostRepository.findServicePostById(id).orElseThrow(() -> new ServicePostNotFoundException("No se encontró un service post con la id."));
     }
 
