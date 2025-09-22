@@ -1,20 +1,31 @@
 package com.hurryhand.backend.services;
 
 
+import com.hurryhand.backend.auth.AuthResponse;
+import com.hurryhand.backend.auth.JwtService;
+import com.hurryhand.backend.dto.UserDetailsDTO;
+import com.hurryhand.backend.dto.editprofie.ChangeEmailRequestDTO;
+import com.hurryhand.backend.dto.editprofie.ChangeNameRequestDTO;
+import com.hurryhand.backend.dto.editprofie.ChangePasswordRequestDTO;
+import com.hurryhand.backend.dto.editprofie.ChangePhoneRequestDTO;
 import com.hurryhand.backend.dto.user.CreateUserDTO;
 import com.hurryhand.backend.dto.user.UserResponseDTO;
 import com.hurryhand.backend.enums.Role;
 import com.hurryhand.backend.exceptions.attribute.EmailAlreadyInUseException;
+import com.hurryhand.backend.exceptions.attribute.PhoneNumberAlreadyInUseException;
 import com.hurryhand.backend.exceptions.user.UnderAgeUserException;
 import com.hurryhand.backend.exceptions.user.UserNotFoundException;
+import com.hurryhand.backend.mappers.BaseUserMapper;
 import com.hurryhand.backend.mappers.UserMapper;
 import com.hurryhand.backend.models.User;
 import com.hurryhand.backend.repositories.UserRepository;
+import com.hurryhand.backend.security.CustomUserDetails;
 import com.hurryhand.backend.validations.UserValidator;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.webauthn.api.AuthenticatorResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,6 +41,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserValidator userValidator;
     private final UserMapper userMapper;
+    private final JwtService jwtService;
+    private final BaseUserMapper baseUserMapper;
 
     @Transactional
     public User addNewUser(@Valid CreateUserDTO createUserDTO) throws UnderAgeUserException,
@@ -90,6 +103,55 @@ public class UserService {
         return users.stream().map(user -> userMapper.toUserResponseDTO(user)).toList();
     }
 
+    //EDICION DE USUARIO
+    @Transactional
+    public UserResponseDTO changePhone(User user, ChangePhoneRequestDTO request) throws PhoneNumberAlreadyInUseException {
+
+        user.setPhoneNumber(request.getPhoneNumber());
+        userRepository.save(user);
+
+        return userMapper.toUserResponseDTO(user);
+    }
+
+    @Transactional
+    public AuthResponse changeEmail(User user, ChangeEmailRequestDTO request) throws EmailAlreadyInUseException {
+
+        if (userRepository.existsUserByEmail(request.getEmail())){
+            throw new EmailAlreadyInUseException("Este nuevo email ya esta en uso");
+        }
+
+        user.setEmail(request.getEmail());
+        userRepository.save(user);
+        UserDetailsDTO userDetails = baseUserMapper.toUserDetailsDTO(user);
+        String newToken = jwtService.generateToken(new CustomUserDetails(userDetails));
+        return new AuthResponse(newToken,userMapper.toUserResponseDTO(user));
+    }
+
+    @Transactional
+    public UserResponseDTO changeNameAndSurname(User user, ChangeNameRequestDTO request) {
+
+        user.setName(request.getName());
+        user.setSurname(request.getSurname());
+
+        userRepository.save(user);
+
+        return  userMapper.toUserResponseDTO(user);
+    }
+
+    @Transactional
+    public UserResponseDTO changePassword(User user, ChangePasswordRequestDTO request) {
+
+        if(!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())){
+            throw new IllegalArgumentException("La contraseña no coincide con la anterior");
+        }
+        String encodedNewPassword = passwordEncoder.encode(request.getNewPassword());
+        user.setPassword(encodedNewPassword);
+        userRepository.save(user);
+
+        return userMapper.toUserResponseDTO(user);
+
+
+    }
 
 
 
