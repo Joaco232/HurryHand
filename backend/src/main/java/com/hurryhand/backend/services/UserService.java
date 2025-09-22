@@ -107,6 +107,8 @@ public class UserService {
     @Transactional
     public UserResponseDTO changePhone(User user, ChangePhoneRequestDTO request) throws PhoneNumberAlreadyInUseException {
 
+        userValidator.validateUniquePhoneNumber(request.getPhoneNumber());
+
         user.setPhoneNumber(request.getPhoneNumber());
         userRepository.save(user);
 
@@ -116,12 +118,11 @@ public class UserService {
     @Transactional
     public AuthResponse changeEmail(User user, ChangeEmailRequestDTO request) throws EmailAlreadyInUseException {
 
-        if (userRepository.existsUserByEmail(request.getEmail())){
-            throw new EmailAlreadyInUseException("Este nuevo email ya esta en uso");
-        }
+        userValidator.validateUniqueEmail(request.getEmail());
 
         user.setEmail(request.getEmail());
         userRepository.save(user);
+
         UserDetailsDTO userDetails = baseUserMapper.toUserDetailsDTO(user);
         String newToken = jwtService.generateToken(new CustomUserDetails(userDetails));
         return new AuthResponse(newToken,userMapper.toUserResponseDTO(user));
@@ -149,8 +150,6 @@ public class UserService {
         userRepository.save(user);
 
         return userMapper.toUserResponseDTO(user);
-
-
     }
 
 
