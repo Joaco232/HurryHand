@@ -145,6 +145,7 @@ public class UserService {
         if(!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())){
             throw new IllegalArgumentException("La contraseña no coincide con la anterior");
         }
+
         String encodedNewPassword = passwordEncoder.encode(request.getNewPassword());
         user.setPassword(encodedNewPassword);
         userRepository.save(user);
