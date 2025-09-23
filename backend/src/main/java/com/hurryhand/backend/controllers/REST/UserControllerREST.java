@@ -5,10 +5,7 @@ import com.hurryhand.backend.auth.AuthResponse;
 import com.hurryhand.backend.decorators.AddNewUserDoc;
 import com.hurryhand.backend.decorators.GetUserByIdDoc;
 import com.hurryhand.backend.dto.ApiResponse;
-import com.hurryhand.backend.dto.editprofie.ChangeEmailRequestDTO;
-import com.hurryhand.backend.dto.editprofie.ChangeNameRequestDTO;
-import com.hurryhand.backend.dto.editprofie.ChangePasswordRequestDTO;
-import com.hurryhand.backend.dto.editprofie.ChangePhoneRequestDTO;
+import com.hurryhand.backend.dto.editprofie.*;
 import com.hurryhand.backend.dto.user.CreateUserDTO;
 import com.hurryhand.backend.dto.user.UserResponseDTO;
 import com.hurryhand.backend.exceptions.user.UserNotFoundException;
@@ -40,7 +37,7 @@ public class UserControllerREST {
 
     private final UserService userService;
     private final UserMapper userMapper;
-    private final ApiResponseMapper  apiResponseMapper;
+    private final ApiResponseMapper apiResponseMapper;
 
     @PostMapping()
     @AddNewUserDoc
@@ -79,11 +76,13 @@ public class UserControllerREST {
     // Parte de editar user
     @PreAuthorize("hasRole('USER')")
     @PatchMapping("/phone")
-    public ResponseEntity<UserResponseDTO> changePhone(@RequestBody @Valid ChangePhoneRequestDTO request,
+    public ResponseEntity<ApiResponse> changePhoneNumber(@RequestBody @Valid ChangePhoneRequestDTO request,
                                                        @AuthenticationPrincipal CustomUserDetails userDetails) throws UserNotFoundException{
         User user = userService.getUserById(userDetails.getId());
-        return ResponseEntity.ok(userService.changePhone(user, request));
+        userService.changePhoneNumber(user, request);
+        return apiResponseMapper.makeResponseEntity(HttpStatus.OK,"Telefono actualizada con exito");
     }
+
     @PreAuthorize("hasRole('USER')")
     @PatchMapping("/email")
     public ResponseEntity<AuthResponse> changeEmail(@RequestBody @Valid ChangeEmailRequestDTO request,
@@ -91,25 +90,37 @@ public class UserControllerREST {
         User user = userService.getUserById(userDetails.getId());
         return ResponseEntity.ok(userService.changeEmail(user, request));
     }
+
     @PreAuthorize("hasRole('USER')")
     @PatchMapping("/name")
-    public ResponseEntity<UserResponseDTO> changeNameAndSurname(@RequestBody @Valid ChangeNameRequestDTO request,
+    public ResponseEntity<ApiResponse> changeNameAndSurname(@RequestBody @Valid ChangeNameRequestDTO request,
                                                        @AuthenticationPrincipal CustomUserDetails userDetails) throws UserNotFoundException{
         User user = userService.getUserById(userDetails.getId());
-        return ResponseEntity.ok(userService.changeNameAndSurname(user, request));
+        userService.changeName(user, request);
+        return apiResponseMapper.makeResponseEntity(HttpStatus.OK, "Nombre actualizada con exito.");
     }
+
+    @PreAuthorize("hasRole('USER')")
+    @PatchMapping("/surname")
+    public ResponseEntity<ApiResponse> changeSurname(@RequestBody @Valid ChangeSurnameRequestDTO request,
+                                                            @AuthenticationPrincipal CustomUserDetails userDetails) throws UserNotFoundException {
+        User user = userService.getUserById(userDetails.getId());
+        userService.changeSurname(user, request);
+        return apiResponseMapper.makeResponseEntity(HttpStatus.OK, "Nombre actualizada con exito.");
+    }
+
 
     @PreAuthorize("hasRole('USER')")
     @PatchMapping("/password")
-    public ResponseEntity<UserResponseDTO> changePassword(@RequestBody @Valid ChangePasswordRequestDTO request,
+    public ResponseEntity<ApiResponse> changePassword(@RequestBody @Valid ChangePasswordRequestDTO request,
                                                                    @AuthenticationPrincipal CustomUserDetails userDetails) throws UserNotFoundException{
-
         User user = userService.getUserById(userDetails.getId());
-
         userService.changePassword(user, request);
 
-        return ResponseEntity.ok(apiResponseMapper.makeResponseEntity(HttpStatus.OK, "Contrasena actualizada con exito."));
+        return (apiResponseMapper.makeResponseEntity(HttpStatus.OK, "Contrasena actualizada con exito."));
     }
+
+
 
 
 }

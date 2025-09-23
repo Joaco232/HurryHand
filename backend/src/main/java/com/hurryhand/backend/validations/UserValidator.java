@@ -7,6 +7,7 @@ import com.hurryhand.backend.exceptions.user.UnderAgeUserException;
 import com.hurryhand.backend.repositories.AdminRepository;
 import com.hurryhand.backend.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ public class UserValidator {
     private final UserRepository userRepository;
     private final AdminRepository adminRepository;
     private static final int MINIMUM_AGE = 18;
+    private final PasswordEncoder passwordEncoder;
 
     public void validateUniqueEmail(String email) throws EmailAlreadyInUseException {
 
@@ -39,6 +41,13 @@ public class UserValidator {
 
         if (userRepository.existsUserByPhoneNumber(phoneNumber)) {
             throw new PhoneNumberAlreadyInUseException("Ya existe una cuenta registrada con este número de teléfono.");
+        }
+    }
+
+    public void validatePasswordMatches(String currentPassword, String newPassword) {
+
+        if(!passwordEncoder.matches(newPassword, currentPassword)) {
+            throw new IllegalArgumentException("La contraseña no coincide con la anterior");
         }
     }
 

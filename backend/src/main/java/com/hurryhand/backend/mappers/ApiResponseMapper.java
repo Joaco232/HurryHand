@@ -4,10 +4,12 @@ import com.hurryhand.backend.dto.ApiError;
 import com.hurryhand.backend.dto.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
+@Component
 public class ApiResponseMapper {
 
 

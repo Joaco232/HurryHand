@@ -4,15 +4,13 @@ package com.hurryhand.backend.services;
 import com.hurryhand.backend.auth.AuthResponse;
 import com.hurryhand.backend.auth.JwtService;
 import com.hurryhand.backend.dto.UserDetailsDTO;
-import com.hurryhand.backend.dto.editprofie.ChangeEmailRequestDTO;
-import com.hurryhand.backend.dto.editprofie.ChangeNameRequestDTO;
-import com.hurryhand.backend.dto.editprofie.ChangePasswordRequestDTO;
-import com.hurryhand.backend.dto.editprofie.ChangePhoneRequestDTO;
+import com.hurryhand.backend.dto.editprofie.*;
 import com.hurryhand.backend.dto.user.CreateUserDTO;
 import com.hurryhand.backend.dto.user.UserResponseDTO;
 import com.hurryhand.backend.enums.Role;
 import com.hurryhand.backend.exceptions.attribute.EmailAlreadyInUseException;
 import com.hurryhand.backend.exceptions.attribute.PhoneNumberAlreadyInUseException;
+import com.hurryhand.backend.exceptions.user.PasswordDontMatch;
 import com.hurryhand.backend.exceptions.user.UnderAgeUserException;
 import com.hurryhand.backend.exceptions.user.UserNotFoundException;
 import com.hurryhand.backend.mappers.BaseUserMapper;
@@ -105,14 +103,14 @@ public class UserService {
 
     //EDICION DE USUARIO
     @Transactional
-    public UserResponseDTO changePhone(User user, ChangePhoneRequestDTO request) throws PhoneNumberAlreadyInUseException {
+    public void changePhoneNumber(User user, ChangePhoneRequestDTO request) throws PhoneNumberAlreadyInUseException {
 
         userValidator.validateUniquePhoneNumber(request.getPhoneNumber());
 
         user.setPhoneNumber(request.getPhoneNumber());
         userRepository.save(user);
 
-        return userMapper.toUserResponseDTO(user);
+        //return userMapper.toUserResponseDTO(user);
     }
 
     @Transactional
@@ -129,28 +127,35 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDTO changeNameAndSurname(User user, ChangeNameRequestDTO request) {
+    public void changeName(User user, ChangeNameRequestDTO request) {
 
         user.setName(request.getName());
-        user.setSurname(request.getSurname());
-
         userRepository.save(user);
 
-        return  userMapper.toUserResponseDTO(user);
+        //return  userMapper.toUserResponseDTO(user);
     }
 
-    @Transactional
-    public UserResponseDTO changePassword(User user, ChangePasswordRequestDTO request) {
+    public void changeSurname(User user, ChangeSurnameRequestDTO request) {
 
-        if(!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())){
-            throw new IllegalArgumentException("La contraseña no coincide con la anterior");
-        }
+        user.setSurname(request.getSurname());
+        userRepository.save(user);
+
+    }
+
+
+
+
+
+    @Transactional
+    public void changePassword(User user, ChangePasswordRequestDTO request) {
+
+        userValidator.validatePasswordMatches(request.getCurrentPassword(),user.getPassword());
 
         String encodedNewPassword = passwordEncoder.encode(request.getNewPassword());
         user.setPassword(encodedNewPassword);
         userRepository.save(user);
 
-        return userMapper.toUserResponseDTO(user);
+        //return userMapper.toUserResponseDTO(user);
     }
 
 
