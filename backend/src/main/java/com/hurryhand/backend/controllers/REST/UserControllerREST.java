@@ -72,21 +72,21 @@ public class UserControllerREST {
 
     // Parte de editar user
     @PreAuthorize("hasRole('USER')")
-    @PatchMapping("/change/phone")
+    @PatchMapping("/phone")
     public ResponseEntity<UserResponseDTO> changePhone(@RequestBody @Valid ChangePhoneRequestDTO request,
                                                        @AuthenticationPrincipal CustomUserDetails userDetails) throws UserNotFoundException{
         User user = userService.getUserById(userDetails.getId());
         return ResponseEntity.ok(userService.changePhone(user, request));
     }
     @PreAuthorize("hasRole('USER')")
-    @PatchMapping("/change/email")
+    @PatchMapping("/email")
     public ResponseEntity<AuthResponse> changeEmail(@RequestBody @Valid ChangeEmailRequestDTO request,
                                                     @AuthenticationPrincipal CustomUserDetails userDetails) throws UserNotFoundException{
         User user = userService.getUserById(userDetails.getId());
         return ResponseEntity.ok(userService.changeEmail(user, request));
     }
     @PreAuthorize("hasRole('USER')")
-    @PatchMapping("/change/name")
+    @PatchMapping("/name")
     public ResponseEntity<UserResponseDTO> changeNameAndSurname(@RequestBody @Valid ChangeNameRequestDTO request,
                                                        @AuthenticationPrincipal CustomUserDetails userDetails) throws UserNotFoundException{
         User user = userService.getUserById(userDetails.getId());
@@ -94,7 +94,7 @@ public class UserControllerREST {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PatchMapping("/change/password")
+    @PatchMapping("/password")
     public ResponseEntity<UserResponseDTO> changePassword(@RequestBody @Valid ChangePasswordRequestDTO request,
                                                                    @AuthenticationPrincipal CustomUserDetails userDetails) throws UserNotFoundException{
         User user = userService.getUserById(userDetails.getId());
