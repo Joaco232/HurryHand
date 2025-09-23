@@ -4,6 +4,7 @@ package com.hurryhand.backend.controllers.REST;
 import com.hurryhand.backend.auth.AuthResponse;
 import com.hurryhand.backend.decorators.AddNewUserDoc;
 import com.hurryhand.backend.decorators.GetUserByIdDoc;
+import com.hurryhand.backend.dto.ApiResponse;
 import com.hurryhand.backend.dto.editprofie.ChangeEmailRequestDTO;
 import com.hurryhand.backend.dto.editprofie.ChangeNameRequestDTO;
 import com.hurryhand.backend.dto.editprofie.ChangePasswordRequestDTO;
@@ -11,16 +12,20 @@ import com.hurryhand.backend.dto.editprofie.ChangePhoneRequestDTO;
 import com.hurryhand.backend.dto.user.CreateUserDTO;
 import com.hurryhand.backend.dto.user.UserResponseDTO;
 import com.hurryhand.backend.exceptions.user.UserNotFoundException;
+import com.hurryhand.backend.mappers.ApiResponseMapper;
 import com.hurryhand.backend.mappers.UserMapper;
 import com.hurryhand.backend.models.User;
+import com.hurryhand.backend.repositories.UserRepository;
 import com.hurryhand.backend.security.CustomUserDetails;
 import com.hurryhand.backend.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
@@ -35,6 +40,7 @@ public class UserControllerREST {
 
     private final UserService userService;
     private final UserMapper userMapper;
+    private final ApiResponseMapper  apiResponseMapper;
 
     @PostMapping()
     @AddNewUserDoc
@@ -72,21 +78,21 @@ public class UserControllerREST {
 
     // Parte de editar user
     @PreAuthorize("hasRole('USER')")
-    @PatchMapping("/change/phone")
+    @PatchMapping("/phone")
     public ResponseEntity<UserResponseDTO> changePhone(@RequestBody @Valid ChangePhoneRequestDTO request,
                                                        @AuthenticationPrincipal CustomUserDetails userDetails) throws UserNotFoundException{
         User user = userService.getUserById(userDetails.getId());
         return ResponseEntity.ok(userService.changePhone(user, request));
     }
     @PreAuthorize("hasRole('USER')")
-    @PatchMapping("/change/email")
+    @PatchMapping("/email")
     public ResponseEntity<AuthResponse> changeEmail(@RequestBody @Valid ChangeEmailRequestDTO request,
                                                     @AuthenticationPrincipal CustomUserDetails userDetails) throws UserNotFoundException{
         User user = userService.getUserById(userDetails.getId());
         return ResponseEntity.ok(userService.changeEmail(user, request));
     }
     @PreAuthorize("hasRole('USER')")
-    @PatchMapping("/change/name")
+    @PatchMapping("/name")
     public ResponseEntity<UserResponseDTO> changeNameAndSurname(@RequestBody @Valid ChangeNameRequestDTO request,
                                                        @AuthenticationPrincipal CustomUserDetails userDetails) throws UserNotFoundException{
         User user = userService.getUserById(userDetails.getId());
@@ -94,11 +100,15 @@ public class UserControllerREST {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PatchMapping("/change/password")
-    public ResponseEntity<UserResponseDTO> changePassword(@RequestBody @Valid ChangePasswordRequestDTO request,
-                                                                   @AuthenticationPrincipal CustomUserDetails userDetails) throws UserNotFoundException{
+    @PatchMapping("/password")
+    public ResponseEntity<ApiResponse> changePassword(@RequestBody @Valid ChangePasswordRequestDTO request,
+                                                      @AuthenticationPrincipal CustomUserDetails userDetails) throws UserNotFoundException {
+
         User user = userService.getUserById(userDetails.getId());
-        return ResponseEntity.ok(userService.changePassword(user, request));
+
+        userService.changePassword(user, request);
+
+        return ResponseEntity.ok(apiResponseMapper.makeResponseEntity(HttpStatus.OK, "Contrasena actualizada con exito."));
     }
 
 
