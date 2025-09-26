@@ -1,9 +1,11 @@
 package com.hurryhand.backend.controllers.REST;
 
 
+import com.hurryhand.backend.dto.ApiResponse;
 import com.hurryhand.backend.dto.servicepost.CreateServicePostDTO;
 import com.hurryhand.backend.dto.servicepost.GetServicePostParamsDTO;
 import com.hurryhand.backend.dto.servicepost.ServicePostForVisualDTO;
+import com.hurryhand.backend.mappers.ApiResponseMapper;
 import com.hurryhand.backend.models.Provider;
 import com.hurryhand.backend.security.CustomUserDetails;
 import com.hurryhand.backend.services.ProviderService;
@@ -31,21 +33,19 @@ public class ServicePostControllerREST {
     private final ServicePostService servicePostService;
     private final UserService userService;
     private final ProviderService providerService;
+    private final ApiResponseMapper apiResponseMapper;
 
 
     @PostMapping()
     @PreAuthorize("hasRole('PROVIDER')")
-    public ResponseEntity<Map<String, String>> createServicePost(@Valid @RequestBody CreateServicePostDTO createServicePostDTO,
-                                                          @AuthenticationPrincipal CustomUserDetails user) {
+    public ResponseEntity<ApiResponse> createServicePost(@Valid @RequestBody CreateServicePostDTO createServicePostDTO,
+                                                         @AuthenticationPrincipal CustomUserDetails user) {
 
         Provider provider = providerService.getProviderByUser(userService.getUserById(user.getId()));
 
         servicePostService.createServicePost(createServicePostDTO, provider);
 
-        Map<String, String> message = new HashMap<>();
-        message.put("mensaje", "Service Post creado exitosamente");
-
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        return apiResponseMapper.makeResponseEntity(HttpStatus.OK,"Service Post creado exitosamente");
     }
 
     @GetMapping("/all")

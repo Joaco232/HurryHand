@@ -1,7 +1,9 @@
 package com.hurryhand.backend.controllers.REST;
 
+import com.hurryhand.backend.dto.ApiResponse;
 import com.hurryhand.backend.dto.credential.CreateCredentialDTO;
 import com.hurryhand.backend.dto.credential.CredentialResponseDTO;
+import com.hurryhand.backend.mappers.ApiResponseMapper;
 import com.hurryhand.backend.models.Provider;
 import com.hurryhand.backend.models.User;
 import com.hurryhand.backend.security.CustomUserDetails;
@@ -29,19 +31,17 @@ public class CredentialControllerREST {
     private final CredentialService credentialService;
     private final ProviderService providerService;
     private final UserService userService;
+    private final ApiResponseMapper apiResponseMapper;
 
     @PostMapping()
     @PreAuthorize("hasRole('PROVIDER')")
-    public ResponseEntity<Map<String, String>> createCredential(@Valid @RequestBody CreateCredentialDTO createCredentialDTO,
-                                                                @AuthenticationPrincipal CustomUserDetails user) {
+    public ResponseEntity<ApiResponse> createCredential(@Valid @RequestBody CreateCredentialDTO createCredentialDTO,
+                                                        @AuthenticationPrincipal CustomUserDetails user) {
         System.out.println("ENTRE AL CONTROLLER");
         Provider provider = providerService.getProviderByUser(userService.getUserById(user.getId()));
         credentialService.addNewCredentailForUser(createCredentialDTO, provider);
 
-        Map<String, String> message = new HashMap<>();
-        message.put("mensaje", "Credential creada exitosamente");
-
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        return apiResponseMapper.makeResponseEntity(HttpStatus.OK,"Credential creada exitosamente");
 
     }
 

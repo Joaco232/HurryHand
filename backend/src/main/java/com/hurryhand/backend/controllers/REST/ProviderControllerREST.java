@@ -2,6 +2,8 @@ package com.hurryhand.backend.controllers.REST;
 
 
 import com.hurryhand.backend.decorators.SetUserAsProviderDoc;
+import com.hurryhand.backend.dto.ApiResponse;
+import com.hurryhand.backend.mappers.ApiResponseMapper;
 import com.hurryhand.backend.models.User;
 import com.hurryhand.backend.security.CustomUserDetails;
 import com.hurryhand.backend.services.ProviderService;
@@ -24,21 +26,18 @@ public class ProviderControllerREST {
 
     private final ProviderService providerService;
     private final UserService userService;
+    private final ApiResponseMapper apiResponseMapper;
 
     @PostMapping()
     @PreAuthorize("hasRole('USER')")
     @SetUserAsProviderDoc
-    public ResponseEntity<Map<String, String>> setUserAsProvider(@AuthenticationPrincipal CustomUserDetails user) {
+    public ResponseEntity<ApiResponse> setUserAsProvider(@AuthenticationPrincipal CustomUserDetails user) {
 
         User userToSet = userService.getUserById(user.getId());
 
         providerService.setUserAsProvider(userToSet);
 
-
-        Map<String, String> message = new HashMap<>();
-        message.put("mensaje", "Se ha registrado el usuario como provider exitosamente");
-
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        return apiResponseMapper.makeResponseEntity(HttpStatus.OK,"Se ha registrado el usuario como provider exitosamente");
     }
 
 

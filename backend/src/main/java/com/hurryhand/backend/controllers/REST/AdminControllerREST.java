@@ -2,8 +2,10 @@ package com.hurryhand.backend.controllers.REST;
 
 import com.hurryhand.backend.decorators.AddNewAdminDoc;
 import com.hurryhand.backend.decorators.AddNewUserDoc;
+import com.hurryhand.backend.dto.ApiResponse;
 import com.hurryhand.backend.dto.admin.CreateAdminDTO;
 import com.hurryhand.backend.dto.user.CreateUserDTO;
+import com.hurryhand.backend.mappers.ApiResponseMapper;
 import com.hurryhand.backend.services.AdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,16 +25,15 @@ import java.util.Map;
 public class AdminControllerREST {
 
     private final AdminService adminService;
+    private final ApiResponseMapper apiResponseMapper;
 
     @PostMapping()
     @AddNewAdminDoc
-    public ResponseEntity<Map<String, String>> addNewUser(@Valid @RequestBody CreateAdminDTO newAdminDTO){
+    public ResponseEntity<ApiResponse> addNewUser(@Valid @RequestBody CreateAdminDTO newAdminDTO){
 
         adminService.addNewAdmin(newAdminDTO);
-        Map<String, String> message = new HashMap<>();
-        message.put("mensaje", "Admin creado exitosamente");
 
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        return apiResponseMapper.makeResponseEntity(HttpStatus.OK,"Admin creado exitosamente");
     }
 
 

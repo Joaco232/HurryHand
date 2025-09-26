@@ -41,14 +41,11 @@ public class UserControllerREST {
 
     @PostMapping()
     @AddNewUserDoc
-    public ResponseEntity<Map<String, String>> addNewUser(@Valid @RequestBody CreateUserDTO newUserDTO) {
+    public ResponseEntity<ApiResponse> addNewUser(@Valid @RequestBody CreateUserDTO newUserDTO) {
 
         userService.addNewUser(newUserDTO);
 
-        Map<String, String> message = new HashMap<>();
-        message.put("mensaje", "Usuario registrado exitosamente");
-
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        return apiResponseMapper.makeResponseEntity(HttpStatus.OK,"Usuario registrado exitosamente");
     }
 
     @GetMapping("/id/{id}")
