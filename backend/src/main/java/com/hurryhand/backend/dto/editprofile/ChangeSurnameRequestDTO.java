@@ -1,4 +1,4 @@
-package com.hurryhand.backend.dto.editprofie;
+package com.hurryhand.backend.dto.editprofile;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

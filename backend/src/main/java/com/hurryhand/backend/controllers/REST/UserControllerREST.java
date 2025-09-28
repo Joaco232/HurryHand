@@ -5,29 +5,25 @@ import com.hurryhand.backend.auth.AuthResponse;
 import com.hurryhand.backend.decorators.AddNewUserDoc;
 import com.hurryhand.backend.decorators.GetUserByIdDoc;
 import com.hurryhand.backend.dto.ApiResponse;
-import com.hurryhand.backend.dto.editprofie.*;
+import com.hurryhand.backend.dto.editprofile.*;
 import com.hurryhand.backend.dto.user.CreateUserDTO;
+import com.hurryhand.backend.dto.user.ProfilePhotoResponseDTO;
 import com.hurryhand.backend.dto.user.UserResponseDTO;
 import com.hurryhand.backend.exceptions.user.UserNotFoundException;
 import com.hurryhand.backend.mappers.ApiResponseMapper;
 import com.hurryhand.backend.mappers.UserMapper;
 import com.hurryhand.backend.models.User;
-import com.hurryhand.backend.repositories.UserRepository;
 import com.hurryhand.backend.security.CustomUserDetails;
 import com.hurryhand.backend.services.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -118,6 +114,17 @@ public class UserControllerREST {
     }
 
 
+    @PreAuthorize("hasRole('USER')")
+    @PatchMapping("/photo")
+    public  ResponseEntity<ProfilePhotoResponseDTO> changeProfilePhoto(
+            @RequestBody @Valid ChangeProfilePhotoDTO request,
+            @AuthenticationPrincipal CustomUserDetails userDetails) throws UserNotFoundException {
+        User user = userService.getUserById(userDetails.getId());
+        ProfilePhotoResponseDTO response = userService.changeProfilePhoto(user, request);
+
+        return ResponseEntity.ok(response);
+
+    }
 
 
 }

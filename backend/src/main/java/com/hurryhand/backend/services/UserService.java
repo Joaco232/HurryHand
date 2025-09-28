@@ -4,16 +4,17 @@ package com.hurryhand.backend.services;
 import com.hurryhand.backend.auth.AuthResponse;
 import com.hurryhand.backend.auth.JwtService;
 import com.hurryhand.backend.dto.UserDetailsDTO;
-import com.hurryhand.backend.dto.editprofie.*;
+import com.hurryhand.backend.dto.editprofile.*;
 import com.hurryhand.backend.dto.user.CreateUserDTO;
+import com.hurryhand.backend.dto.user.ProfilePhotoResponseDTO;
 import com.hurryhand.backend.dto.user.UserResponseDTO;
 import com.hurryhand.backend.enums.Role;
 import com.hurryhand.backend.exceptions.attribute.EmailAlreadyInUseException;
 import com.hurryhand.backend.exceptions.attribute.PhoneNumberAlreadyInUseException;
-import com.hurryhand.backend.exceptions.user.PasswordDontMatch;
 import com.hurryhand.backend.exceptions.user.UnderAgeUserException;
 import com.hurryhand.backend.exceptions.user.UserNotFoundException;
 import com.hurryhand.backend.mappers.BaseUserMapper;
+import com.hurryhand.backend.mappers.ProfilePhotoMapper;
 import com.hurryhand.backend.mappers.UserMapper;
 import com.hurryhand.backend.models.User;
 import com.hurryhand.backend.repositories.UserRepository;
@@ -23,12 +24,10 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.webauthn.api.AuthenticatorResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -41,6 +40,7 @@ public class UserService {
     private final UserMapper userMapper;
     private final JwtService jwtService;
     private final BaseUserMapper baseUserMapper;
+    private final ProfilePhotoMapper profilePhotoMapper;
 
     @Transactional
     public User addNewUser(@Valid CreateUserDTO createUserDTO) throws UnderAgeUserException,
@@ -132,7 +132,6 @@ public class UserService {
         user.setName(request.getName());
         userRepository.save(user);
 
-        //return  userMapper.toUserResponseDTO(user);
     }
 
     public void changeSurname(User user, ChangeSurnameRequestDTO request) {
@@ -142,8 +141,13 @@ public class UserService {
 
     }
 
+    public ProfilePhotoResponseDTO changeProfilePhoto(User user, ChangeProfilePhotoDTO request){
 
+        user.setProfilePhoto(request.getProfilePhoto());
+        userRepository.save(user);
+        return profilePhotoMapper.photoResponse(user);
 
+    }
 
 
     @Transactional
