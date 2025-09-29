@@ -1,10 +1,8 @@
 package com.hurryhand.backend.dto.servicepost;
 
-
-import com.hurryhand.backend.models.Appointment;
-import com.hurryhand.backend.models.Location;
-import com.hurryhand.backend.models.Provider;
-import jakarta.persistence.*;
+import com.hurryhand.backend.enums.DepartamentoUY;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -12,15 +10,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.OptionalDouble;
 
 @Data
 @Builder
@@ -28,27 +21,44 @@ import java.util.OptionalDouble;
 @NoArgsConstructor
 public class CreateServicePostDTO {
 
-    @NotNull(message = "El titulo no puede ser nulo.")
+    @NotBlank(message = "El titulo no puede estar vacio.")
     @Size(min = 4, max = 150, message = "El titulo debe contener entre 4 y 150 caracteres.")
-    @Pattern(regexp = "^[a-zA-Z0-9áéíóúÁÉÍÓÚüÜñÑ\\s'\\-]*$", message = "El titulo solo puede contener letras, números y espacios.")
+    @Pattern(regexp = "^[\\p{L}0-9 '\\-]*$", message = "El titulo solo puede contener letras, numeros y espacios.")
     private String title;
 
-    @NotNull(message = "La descripción no puede ser nula.")
-    @Size(min = 4, max = 1000, message = "La descripción debe contener entre 4 y 1000 caracteres.")
-    @Pattern(regexp = "^[a-zA-Z0-9áéíóúÁÉÍÓÚüÜñÑ\\s'\\-]*$", message = "La descripción solo puede contener letras, números y espacios.")
+    @NotBlank(message = "La descripcion no puede estar vacia.")
+    @Size(min = 4, max = 1000, message = "La descripcion debe contener entre 4 y 1000 caracteres.")
+    @Pattern(regexp = "^[\\p{L}0-9 '\\-]*$", message = "La descripcion solo puede contener letras, numeros y espacios.")
     private String description;
 
     @NotNull(message = "El precio no puede ser nulo")
+    @Min(value = 0, message = "El precio no puede ser negativo.")
     private Integer price;
 
-    @NotNull(message = "La ubicación no puede ser nula")
-    private Location location;
+    @NotNull(message = "Debe indicar la duracion en minutos.")
+    @Min(value = 1, message = "La duracion debe ser mayor a cero.")
+    private Integer durationInMinutes;
 
-    @NotNull(message = "Debe tener un lista de fechas disponibles.")
+    private LocationPayload location;
+
+    @NotNull(message = "Debe indicar las fechas disponibles (puede ser una lista vacia).")
+    @Builder.Default
     private List<LocalDateTime> availableDates = new ArrayList<>();
 
-    @NotNull(message = "Debe tener un lista de fotos.")
+    @NotNull(message = "Debe indicar las fotos (puede ser una lista vacia).")
+    @Builder.Default
     private List<String> photosURLs = new ArrayList<>();
 
-
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class LocationPayload {
+        private DepartamentoUY departamento;
+        private String neighbourhood;
+        private String street;
+        private Integer streetNumber;
+        private Integer postalCode;
+        private Integer aptoNumber;
+    }
 }
