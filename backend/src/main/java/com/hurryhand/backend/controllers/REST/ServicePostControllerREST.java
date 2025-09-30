@@ -57,7 +57,7 @@ public class ServicePostControllerREST {
                 getServicePostParamsDTO.getDirection(),
                 getServicePostParamsDTO.getQuery());
 
-        System.out.println("ffdf");
+        System.out.println("ffdfads");
         return new ResponseEntity<>(pageOfServicePosts, HttpStatus.OK);
 
     }
