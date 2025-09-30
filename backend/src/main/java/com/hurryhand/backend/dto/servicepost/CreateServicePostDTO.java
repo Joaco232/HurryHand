@@ -57,11 +57,4 @@ public class CreateServicePostDTO {
     private List<String> photosURLs = new ArrayList<>();
 
 
-    //rating
-    //rpovider
-    //created at
-    //updated at
-    //appointments
-
-
 }
