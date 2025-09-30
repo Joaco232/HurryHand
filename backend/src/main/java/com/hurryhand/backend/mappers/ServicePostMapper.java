@@ -27,6 +27,7 @@ public class ServicePostMapper {
                 .location(createServicePostDTO.getLocation())
                 .availableDates(createServicePostDTO.getAvailableDates())
                 .photosURLs(createServicePostDTO.getPhotosURLs())
+                .duration(createServicePostDTO.getDuration())
                 .build();
     }
 

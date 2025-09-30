@@ -57,7 +57,7 @@ public class ServicePost {
 
     @Column(name = "DURATION", nullable = false)
     @NotNull(message = "Debe ingresar la duración del servicio.")
-    private Duration duration;
+    private Integer duration;
 
     @Embedded
     private Location location;

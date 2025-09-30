@@ -23,7 +23,7 @@ public class ServicePostForVisualDTO {
 
     private Integer price;
 
-    private Duration duration;
+    private Integer duration;
 
     private List<String> photosURLs = new ArrayList<>();
 }
