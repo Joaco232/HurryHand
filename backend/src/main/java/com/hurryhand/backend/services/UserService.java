@@ -155,7 +155,7 @@ public class UserService {
     public void changePassword(User user, ChangePasswordRequestDTO request) {
 
         userValidator.validatePasswordMatches(request.getCurrentPassword(),user.getPassword());
-
+        // mierda
         String encodedNewPassword = passwordEncoder.encode(request.getNewPassword());
         user.setPassword(encodedNewPassword);
         userRepository.save(user);
