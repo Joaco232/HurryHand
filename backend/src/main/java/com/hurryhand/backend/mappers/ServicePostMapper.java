@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ServicePostMapper {
 
+    private final LocationMapper locationMapper;
+
     public ServicePost toEntity(CreateServicePostDTO createServicePostDTO, Provider provider) {
 
         if (createServicePostDTO == null || provider == null) {
@@ -24,9 +26,8 @@ public class ServicePostMapper {
                 .description(createServicePostDTO.getDescription())
                 .provider(provider)
                 .price(createServicePostDTO.getPrice())
-                .location(createServicePostDTO.getLocation())
+                .location(locationMapper.toEntity(createServicePostDTO.getLocation()))
                 .availableDates(createServicePostDTO.getAvailableDates())
-                .photosURLs(createServicePostDTO.getPhotosURLs())
                 .duration(createServicePostDTO.getDuration())
                 .build();
     }

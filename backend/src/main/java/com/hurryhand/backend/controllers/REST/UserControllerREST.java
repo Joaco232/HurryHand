@@ -14,6 +14,7 @@ import com.hurryhand.backend.mappers.ApiResponseMapper;
 import com.hurryhand.backend.mappers.UserMapper;
 import com.hurryhand.backend.models.User;
 import com.hurryhand.backend.security.CustomUserDetails;
+import com.hurryhand.backend.services.MinioService;
 import com.hurryhand.backend.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -34,6 +36,7 @@ public class UserControllerREST {
     private final UserService userService;
     private final UserMapper userMapper;
     private final ApiResponseMapper apiResponseMapper;
+    private final MinioService minioService;
 
     @PostMapping()
     @AddNewUserDoc
@@ -110,21 +113,21 @@ public class UserControllerREST {
         User user = userService.getUserById(userDetails.getId());
         userService.changePassword(user, request);
 
-        return (apiResponseMapper.makeResponseEntity(HttpStatus.OK, "Contrasena actualizada con exito."));
+        return apiResponseMapper.makeResponseEntity(HttpStatus.OK, "Contrasena actualizada con exito.");
     }
 
 
+    @PostMapping("/profile-photo")
     @PreAuthorize("hasRole('USER')")
-    @PatchMapping("/photo")
-    public  ResponseEntity<ProfilePhotoResponseDTO> changeProfilePhoto(
-            @RequestBody @Valid ChangeProfilePhotoDTO request,
-            @AuthenticationPrincipal CustomUserDetails userDetails) throws UserNotFoundException {
-        User user = userService.getUserById(userDetails.getId());
-        ProfilePhotoResponseDTO response = userService.changeProfilePhoto(user, request);
+    public ResponseEntity<String> uploadPhoto(@RequestParam MultipartFile file,
+                              @AuthenticationPrincipal CustomUserDetails userDetails) throws Exception {
 
-        return ResponseEntity.ok(response);
+        User user = userService.getUserById(userDetails.getId());
+
+        return ResponseEntity.ok(minioService.uploadUserProfilePhoto(user, file));
 
     }
+
 
 
 }

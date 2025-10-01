@@ -20,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ServicePostService {
@@ -38,9 +40,10 @@ public class ServicePostService {
     }
 
 
-    public ServicePost getServicePostById(long id) throws ServicePostNotFoundException {
+    public ServicePost getServicePostById(Long id) throws ServicePostNotFoundException {
 
-        return servicePostRepository.findServicePostById(id).orElseThrow(() -> new ServicePostNotFoundException("No se encontró un service post con la id."));
+        return servicePostRepository.findServicePostById(id)
+                .orElseThrow(() -> new ServicePostNotFoundException("No se encontró un service post con la id."));
     }
 
 
@@ -67,11 +70,13 @@ public class ServicePostService {
     }
 
 
+    public void uploadPhotosURLsOfServicePost(ServicePost servicePost, List<String> newPhotosURLs) throws ServicePostNotFoundException {
 
+        servicePost.setPhotosURLs(newPhotosURLs);
 
+        servicePostRepository.save(servicePost);
 
-
-
+    }
 
 
 

@@ -83,7 +83,7 @@ public class ServicePost {
             name = "SERVICE_POST_PHOTOS",
             joinColumns = @JoinColumn(name = "SERVICE_POST_ID")
     )
-    @Column(name = "PHOTO_URL", length = 500, nullable = false)
+    @Column(name = "PHOTO_URL", length = 500, nullable = true)
     private List<String> photosURLs = new ArrayList<>();
 
     @OneToMany(mappedBy = "servicePost", cascade = CascadeType.ALL, orphanRemoval = true)
