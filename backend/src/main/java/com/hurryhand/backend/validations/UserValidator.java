@@ -46,7 +46,7 @@ public class UserValidator {
 
     public void validatePasswordMatches(String currentPassword, String newPassword) {
 
-        if(!passwordEncoder.matches(newPassword, currentPassword)) {
+        if(!passwordEncoder.matches(currentPassword, newPassword)) {
             throw new IllegalArgumentException("La contraseña no coincide con la anterior");
         }
     }
