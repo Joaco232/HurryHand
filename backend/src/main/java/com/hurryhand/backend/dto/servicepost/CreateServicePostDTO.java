@@ -2,9 +2,11 @@ package com.hurryhand.backend.dto.servicepost;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hurryhand.backend.dto.LocationPayload;
 import com.hurryhand.backend.models.Appointment;
 import com.hurryhand.backend.models.Location;
 import com.hurryhand.backend.models.Provider;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -47,14 +49,12 @@ public class CreateServicePostDTO {
     private Integer price;
 
     @NotNull(message = "La ubicación no puede ser nula")
-    private Location location;
+    private LocationPayload location;
 
+    @Schema(type = "string", pattern = "yyyy-MM-dd-HH-mm-ss", example = "2025-09-30-19-27-31")
     @NotNull(message = "Debe tener un lista de fechas disponibles.")
     @JsonFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
     private List<LocalDateTime> availableDates = new ArrayList<>();
-
-    @NotNull(message = "Debe tener un lista de fotos.")
-    private List<String> photosURLs = new ArrayList<>();
 
 
     //rating

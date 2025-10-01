@@ -134,6 +134,7 @@ public class UserService {
 
     }
 
+    @Transactional
     public void changeSurname(User user, ChangeSurnameRequestDTO request) {
 
         user.setSurname(request.getSurname());
@@ -141,11 +142,11 @@ public class UserService {
 
     }
 
-    public ProfilePhotoResponseDTO changeProfilePhoto(User user, ChangeProfilePhotoDTO request){
+    @Transactional
+    public void changeProfilePhoto(User user, String photoUrl){
 
-        user.setProfilePhoto(request.getProfilePhoto());
+        user.setProfilePhoto(photoUrl);
         userRepository.save(user);
-        return profilePhotoMapper.photoResponse(user);
 
     }
 
@@ -161,6 +162,8 @@ public class UserService {
 
         //return userMapper.toUserResponseDTO(user);
     }
+
+
 
 
 

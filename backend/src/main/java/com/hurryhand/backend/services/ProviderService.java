@@ -54,6 +54,12 @@ public class ProviderService {
                 .orElseThrow(() -> new ProviderNotFoundException("No se encontró el provider."));
     }
 
+    public Provider getProviderByUserEmail(String email) throws ProviderNotFoundException {
+
+        return providerRepository.findProviderByUserEmail(email)
+                .orElseThrow(() -> new ProviderNotFoundException("No se encontro el provider."));
+    }
+
 
 
 

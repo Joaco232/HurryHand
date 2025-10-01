@@ -7,7 +7,9 @@ import com.hurryhand.backend.dto.servicepost.GetServicePostParamsDTO;
 import com.hurryhand.backend.dto.servicepost.ServicePostForVisualDTO;
 import com.hurryhand.backend.mappers.ApiResponseMapper;
 import com.hurryhand.backend.models.Provider;
+import com.hurryhand.backend.models.ServicePost;
 import com.hurryhand.backend.security.CustomUserDetails;
+import com.hurryhand.backend.services.MinioService;
 import com.hurryhand.backend.services.ProviderService;
 import com.hurryhand.backend.services.ServicePostService;
 import com.hurryhand.backend.services.UserService;
@@ -19,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +37,7 @@ public class ServicePostControllerREST {
     private final UserService userService;
     private final ProviderService providerService;
     private final ApiResponseMapper apiResponseMapper;
+    private final MinioService minioService;
 
 
     @PostMapping()
@@ -57,9 +61,19 @@ public class ServicePostControllerREST {
                 getServicePostParamsDTO.getDirection(),
                 getServicePostParamsDTO.getQuery());
 
-        System.out.println("ffdfads");
         return new ResponseEntity<>(pageOfServicePosts, HttpStatus.OK);
 
+    }
+
+    @PostMapping("/servicepost-photos")
+    @PreAuthorize("hasRole('PROVIDER')")
+    public ResponseEntity<List<String>> uploadPhotosForServicePost(@RequestParam("files") List<MultipartFile> files,
+                                                         @RequestParam("servicePostId") Long servicePostId,
+                                                         @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        ServicePost servicePost = servicePostService.getServicePostById(servicePostId);
+
+        return new ResponseEntity<>(minioService.uploadServicePostPhotos(userDetails.getEmail(), servicePost, files), HttpStatus.OK);
     }
 
 
