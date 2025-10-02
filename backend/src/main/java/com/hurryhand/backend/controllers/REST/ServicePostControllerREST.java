@@ -97,15 +97,6 @@ public class ServicePostControllerREST {
 
     }
 
-    @PostMapping("/photos")
-    @PreAuthorize("hasRole('PROVIDER')")
-    public ResponseEntity<List<String>> uploadPhotosOnly(@RequestParam("files") List<MultipartFile> files,
-                                                         @AuthenticationPrincipal CustomUserDetails userDetails) {
-
-        // Subir fotos sin asociar a un servicePost específico
-        return new ResponseEntity<>(minioService.uploadPhotosOnly(userDetails.getEmail(), files), HttpStatus.OK);
-    }
-
     @PostMapping("/servicepost-photos")
     @PreAuthorize("hasRole('PROVIDER')")
     public ResponseEntity<List<String>> uploadPhotosForServicePost(@RequestParam("files") List<MultipartFile> files,
