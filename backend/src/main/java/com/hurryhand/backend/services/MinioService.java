@@ -114,6 +114,46 @@ public class MinioService {
         }
     }
 
+    public List<String> uploadPhotosOnly(String providerEmail, List<MultipartFile> files) {
+
+        try {
+
+            if (files == null || files.isEmpty()) {
+                throw new IllegalArgumentException("El archivo de imagen no puede estar vacío.");
+            }
+
+            List<String> urls = new ArrayList<>();
+
+            checkBucketExists();
+
+            for (int i = 0; i < files.size(); i++) {
+
+                MultipartFile file = files.get(i);
+                // Generar nombre único sin servicePostId
+                String timestamp = String.valueOf(System.currentTimeMillis());
+                String objectName = providerEmail + "/temp-photos/" + timestamp + "-photo-" + i;
+                
+                minioClient.putObject(
+                        PutObjectArgs.builder()
+                                .bucket(properties.getBucket())
+                                .object(objectName)
+                                .stream(file.getInputStream(), file.getSize(), -1)
+                                .contentType(file.getContentType())
+                                .build()
+                );
+                urls.add(getPublicUrl(objectName));
+
+            }
+
+            // No llamamos a servicePostService porque aún no existe el service post
+            return urls;
+
+        } catch (Exception e) {
+
+            throw new FailedToUploadPhotosException(e.getMessage());
+        }
+    }
+
 
     private String getPublicUrl(String objectName) {
 

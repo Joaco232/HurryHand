@@ -118,7 +118,7 @@ public class GlobalExceptionHandler {
             if (targetType.equals(LocalDateTime.class)) {
 
                 message = String.format("Formato de fecha inválido en '%s'", fieldName);
-                validationErrors.put(fieldName, "El formato debe ser yyyy-MM-dd-HH-mm-ss");
+                validationErrors.put(fieldName, "El formato debe ser yyyy-MM-ddTHH:mm:ss (formato ISO)");
             }
 
             //para Strings, Integer o Longs

@@ -48,12 +48,12 @@ public class CreateServicePostDTO {
     @NotNull(message = "El precio no puede ser nulo")
     private Integer price;
 
-    @NotNull(message = "La ubicación no puede ser nula")
     private LocationPayload location;
 
-    @Schema(type = "string", pattern = "yyyy-MM-dd-HH-mm-ss", example = "2025-09-30-19-27-31")
+    @Schema(type = "string", pattern = "yyyy-MM-ddTHH:mm:ss", example = "2025-09-30T19:27:31")
     @NotNull(message = "Debe tener un lista de fechas disponibles.")
-    @JsonFormat(pattern = "yyyy-MM-dd-HH-mm-ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Builder.Default
     private List<LocalDateTime> availableDates = new ArrayList<>();
 
 
