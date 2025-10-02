@@ -10,6 +10,10 @@ public class LocationMapper {
 
     public Location toEntity(LocationPayload location) {
 
+        if (location == null) {
+            return null;
+        }
+
         return Location.builder()
                 .departamento(location.getDepartamento())
                 .neighbourhood(location.getNeighbourhood())

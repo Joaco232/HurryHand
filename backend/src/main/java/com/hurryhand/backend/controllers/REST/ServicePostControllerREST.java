@@ -22,13 +22,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/servicepost")
+@RequestMapping("/api/service-post")
 @CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class ServicePostControllerREST {
@@ -40,9 +41,39 @@ public class ServicePostControllerREST {
     private final MinioService minioService;
 
 
-    @PostMapping()
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('PROVIDER')")
-    public ResponseEntity<ApiResponse> createServicePost(@Valid @RequestBody CreateServicePostDTO createServicePostDTO,
+    public ResponseEntity<Map<String, Object>> createServicePostWithPhotos(
+            @RequestPart("servicePost") @Valid CreateServicePostDTO createServicePostDTO,
+            @RequestPart(value = "photos", required = false) List<MultipartFile> photos,
+            @AuthenticationPrincipal CustomUserDetails user) {
+
+        Provider provider = providerService.getProviderByUser(userService.getUserById(user.getId()));
+
+        // Crear el service post
+        ServicePost createdServicePost = servicePostService.createServicePost(createServicePostDTO, provider);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Service Post creado exitosamente");
+        response.put("servicePostId", createdServicePost.getId());
+
+        // Si se enviaron fotos, subirlas y asociarlas al service post
+        if (photos != null && !photos.isEmpty()) {
+            List<String> photoUrls = minioService.uploadServicePostPhotos(user.getEmail(), createdServicePost, photos);
+            response.put("photoUrls", photoUrls);
+            response.put("photosUploaded", photoUrls.size());
+        } else {
+            response.put("photoUrls", List.of());
+            response.put("photosUploaded", 0);
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // Mantener endpoint original para compatibilidad (solo JSON)
+    @PostMapping("/json-only")
+    @PreAuthorize("hasRole('PROVIDER')")
+    public ResponseEntity<ApiResponse> createServicePostJsonOnly(@Valid @RequestBody CreateServicePostDTO createServicePostDTO,
                                                          @AuthenticationPrincipal CustomUserDetails user) {
 
         Provider provider = providerService.getProviderByUser(userService.getUserById(user.getId()));
@@ -52,10 +83,11 @@ public class ServicePostControllerREST {
         return apiResponseMapper.makeResponseEntity(HttpStatus.OK,"Service Post creado exitosamente");
     }
 
-    @GetMapping("/all")
+    @PostMapping("/all")
     public ResponseEntity<Page<ServicePostForVisualDTO>>  getAllServicePostsForVisual(@Valid @RequestBody GetServicePostParamsDTO  getServicePostParamsDTO) {
 
-        Page<ServicePostForVisualDTO> pageOfServicePosts = servicePostService.getPostsForVisual(getServicePostParamsDTO.getPage(),
+        // Convertir de página base-1 (frontend) a base-0 (Spring Data)
+        Page<ServicePostForVisualDTO> pageOfServicePosts = servicePostService.getPostsForVisual(getServicePostParamsDTO.getPage() - 1,
                 getServicePostParamsDTO.getSize(),
                 getServicePostParamsDTO.getSortBy(),
                 getServicePostParamsDTO.getDirection(),
