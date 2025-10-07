@@ -9,6 +9,7 @@ import com.hurryhand.backend.repositories.CredentialRepository;
 import com.hurryhand.backend.repositories.ProviderRepository;
 import com.hurryhand.backend.models.Provider;
 import com.hurryhand.backend.validations.CredentialValidator;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,8 @@ public class CredentialService {
     private final CredentialRepository credentialRepository;
     private final CredentialValidator credentialValidator;
 
+
+    @Transactional
     public Credential addNewCredentailForUser(CreateCredentialDTO createCredentialDTO, Provider provider ){
 
         credentialValidator.validateUniqueCredentialName(createCredentialDTO.getName(), provider);
