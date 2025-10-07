@@ -12,7 +12,8 @@ import org.springframework.stereotype.Component;
 public class CredentialMappper {
 
     public Credential toEntity(CreateCredentialDTO dto, Provider provider){
-        if(dto == null || provider == null){
+
+        if (dto == null || provider == null){
             throw new NullValueForMapperException("DTO o Provider es null al mapear Credential.");
         }
         return Credential.builder()
