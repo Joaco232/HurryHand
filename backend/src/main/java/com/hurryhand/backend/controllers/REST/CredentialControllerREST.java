@@ -37,7 +37,7 @@ public class CredentialControllerREST {
     @PreAuthorize("hasRole('PROVIDER')")
     public ResponseEntity<ApiResponse> createCredential(@Valid @RequestBody CreateCredentialDTO createCredentialDTO,
                                                         @AuthenticationPrincipal CustomUserDetails user) {
-        System.out.println("ENTRE AL CONTROLLER");
+
         Provider provider = providerService.getProviderByUser(userService.getUserById(user.getId()));
         credentialService.addNewCredentailForUser(createCredentialDTO, provider);
 
