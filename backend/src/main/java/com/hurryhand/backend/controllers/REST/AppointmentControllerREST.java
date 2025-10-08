@@ -1,6 +1,7 @@
 package com.hurryhand.backend.controllers.REST;
 
 import com.hurryhand.backend.dto.ApiResponse;
+import com.hurryhand.backend.dto.appointment.AppointmentShowDTO;
 import com.hurryhand.backend.dto.appointment.CreateAppointmentDTO;
 import com.hurryhand.backend.mappers.ApiResponseMapper;
 import com.hurryhand.backend.models.Appointment;
@@ -16,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/appointment")
@@ -38,6 +41,17 @@ public class AppointmentControllerREST {
         appointmentService.createAppointment(createAppointmentDTO,actualUser);
 
         return apiResponseMapper.makeResponseEntity(HttpStatus.OK, "Appointment creado correctamente");
+    }
+
+    @GetMapping("/all/my")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<AppointmentShowDTO>> getAllMyAppointments(@AuthenticationPrincipal CustomUserDetails user) {
+
+        User actualUser = userService.getUserById(user.getId());
+
+        List<AppointmentShowDTO> appointments = appointmentService.getAppointmentsToShowByUser(actualUser);
+
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
 
 
