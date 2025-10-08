@@ -1,5 +1,6 @@
 package com.hurryhand.backend.services;
 
+import com.hurryhand.backend.dto.appointment.AppointmentShowDTO;
 import com.hurryhand.backend.dto.appointment.CreateAppointmentDTO;
 import com.hurryhand.backend.exceptions.user.UserNotFoundException;
 import com.hurryhand.backend.mappers.AppointmentMapper;
@@ -15,8 +16,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-
-
+import java.util.List;
 
 
 @Service
@@ -44,6 +44,14 @@ public class AppointmentService {
         appointmentRepository.save(appointmentMapper.toEntity(createAppointmentDTO, servicePost, user));
 
     }
+
+    public List<AppointmentShowDTO> getAppointmentsToShowByUser(User user) {
+
+        List<Appointment> appointments = appointmentRepository.findAllByCliente(user);
+
+        return appointments.stream().map(appointment -> appointmentMapper.toShowDTO(appointment)).toList();
+    }
+
 
 
 
