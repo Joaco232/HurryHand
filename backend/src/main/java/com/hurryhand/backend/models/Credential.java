@@ -58,7 +58,7 @@ public class Credential {
     @Column(name = "COMPLETED_AT")
     private LocalDate completedAt;
 
-    @Column(name = "CERTIFICATE_URL", length = 255, nullable = false)
+    @Column(name = "CERTIFICATE_URL", length = 255, nullable = true)
     private String certificateUrl;
 
     @Enumerated(EnumType.STRING)
