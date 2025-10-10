@@ -34,9 +34,6 @@ public class CreateCredentialDTO {
 
     private LocalDate completedAt;
 
-    @NotNull(message = "La URL del documento no puede ser nula")
-    private String certificateUrl;
-
     @NotNull(message = "El estado de la credencial no puede ser nulo")
     private CredentialStatus credentialStatus;
 
