@@ -52,6 +52,10 @@ public class AppointmentService {
         return appointments.stream().map(appointment -> appointmentMapper.toShowDTO(appointment)).toList();
     }
 
+    public Appointment getAppointmentById(Long appointmentId) throws Appointment {
+        return appointmentRepository.findById(appointmentId).orElse(null);
+    }
+
 
 
 
