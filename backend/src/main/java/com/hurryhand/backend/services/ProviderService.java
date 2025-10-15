@@ -9,7 +9,6 @@ import com.hurryhand.backend.repositories.ProviderRepository;
 import com.hurryhand.backend.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
