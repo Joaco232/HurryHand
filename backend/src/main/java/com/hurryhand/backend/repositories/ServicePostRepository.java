@@ -20,7 +20,6 @@ public interface ServicePostRepository extends JpaRepository<ServicePost, Long> 
 
     Page<ServicePost> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 
-
     @Query(
             value = "SELECT * FROM service_post " +
                     "WHERE to_tsvector('spanish', title || ' ' || description) @@ to_tsquery('spanish', :query)",
