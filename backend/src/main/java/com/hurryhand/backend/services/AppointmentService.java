@@ -2,14 +2,13 @@ package com.hurryhand.backend.services;
 
 import com.hurryhand.backend.dto.appointment.AppointmentShowDTO;
 import com.hurryhand.backend.dto.appointment.CreateAppointmentDTO;
-import com.hurryhand.backend.exceptions.user.UserNotFoundException;
+import com.hurryhand.backend.exceptions.appointment.AppointmentNotFoundException;
 import com.hurryhand.backend.mappers.AppointmentMapper;
 import com.hurryhand.backend.models.Appointment;
 import com.hurryhand.backend.models.ServicePost;
 import com.hurryhand.backend.models.User;
 import com.hurryhand.backend.repositories.AppointmentRepository;
 import com.hurryhand.backend.repositories.ServicePostRepository;
-import com.hurryhand.backend.repositories.UserRepository;
 import com.hurryhand.backend.validations.AppointmentValidator;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -25,7 +24,6 @@ public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
     private final ServicePostRepository servicePostRepository ;
-    private final UserService userService;
     private final ServicePostService servicePostService;
     private final AppointmentMapper appointmentMapper;
     private final AppointmentValidator appointmentValidator;
@@ -34,6 +32,8 @@ public class AppointmentService {
     public void createAppointment(@Valid CreateAppointmentDTO createAppointmentDTO, User user) {
 
         ServicePost servicePost = servicePostService.getServicePostById(createAppointmentDTO.getServicePostId());
+
+        appointmentValidator.validateAppointmentCreatorIsNotServicePostOwner(servicePost, user);
 
         appointmentValidator.validateDateTimeIsAvailable(servicePost, createAppointmentDTO.getDateTime());
 
@@ -50,6 +50,10 @@ public class AppointmentService {
         List<Appointment> appointments = appointmentRepository.findAllByCliente(user);
 
         return appointments.stream().map(appointment -> appointmentMapper.toShowDTO(appointment)).toList();
+    }
+
+    public Appointment getAppointmentById(Long appointmentId) throws AppointmentNotFoundException {
+        return appointmentRepository.findById(appointmentId).orElseThrow(()-> new AppointmentNotFoundException("El appointment con la id" + appointmentId + "no existe"));
     }
 
 
