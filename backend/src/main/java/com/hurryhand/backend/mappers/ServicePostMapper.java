@@ -1,6 +1,7 @@
 package com.hurryhand.backend.mappers;
 
 import com.hurryhand.backend.dto.servicepost.CreateServicePostDTO;
+import com.hurryhand.backend.dto.servicepost.ServicePostDTO;
 import com.hurryhand.backend.dto.servicepost.ServicePostForVisualDTO;
 import com.hurryhand.backend.exceptions.attribute.NullValueForMapperException;
 import com.hurryhand.backend.models.Provider;
@@ -47,6 +48,26 @@ public class ServicePostMapper {
                 .duration(servicePost.getDuration())
                 .rating(servicePost.getRating())
                 .build();
+    }
+
+    public ServicePostDTO toDto(ServicePost servicePost) {
+
+        if (servicePost == null) {
+            throw new NullValueForMapperException("Service Post es null.");
+
+        }
+
+        return ServicePostDTO.builder()
+                .title(servicePost.getTitle())
+                .description(servicePost.getDescription())
+                .rating(servicePost.getRating())
+                .price(servicePost.getPrice())
+                .duration(servicePost.getDuration())
+                .createdAt(servicePost.getCreatedAt())
+                .availableDates(servicePost.getAvailableDates())
+                .photosURLs(servicePost.getPhotosURLs())
+                .build();
+
     }
 
 

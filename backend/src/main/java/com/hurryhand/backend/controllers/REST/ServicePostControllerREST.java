@@ -4,7 +4,9 @@ package com.hurryhand.backend.controllers.REST;
 import com.hurryhand.backend.dto.ApiResponse;
 import com.hurryhand.backend.dto.servicepost.CreateServicePostDTO;
 import com.hurryhand.backend.dto.servicepost.GetServicePostParamsDTO;
+import com.hurryhand.backend.dto.servicepost.ServicePostDTO;
 import com.hurryhand.backend.dto.servicepost.ServicePostForVisualDTO;
+import com.hurryhand.backend.exceptions.servicepost.ServicePostNotFoundException;
 import com.hurryhand.backend.mappers.ApiResponseMapper;
 import com.hurryhand.backend.models.Provider;
 import com.hurryhand.backend.models.ServicePost;
@@ -14,6 +16,7 @@ import com.hurryhand.backend.services.ProviderService;
 import com.hurryhand.backend.services.ServicePostService;
 import com.hurryhand.backend.services.UserService;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -83,7 +86,7 @@ public class ServicePostControllerREST {
         return apiResponseMapper.makeResponseEntity(HttpStatus.OK,"Service Post creado exitosamente");
     }
 
-    @PostMapping("/all")
+    @GetMapping("/all")
     public ResponseEntity<Page<ServicePostForVisualDTO>>  getAllServicePostsForVisual(@Valid @RequestBody GetServicePostParamsDTO  getServicePostParamsDTO) {
 
         // Convertir de página base-1 (frontend) a base-0 (Spring Data)
@@ -108,6 +111,21 @@ public class ServicePostControllerREST {
         return new ResponseEntity<>(minioService.uploadServicePostPhotos(userDetails.getEmail(), servicePost, files), HttpStatus.OK);
     }
 
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ServicePostDTO> getServicePostDTOById(@PathVariable Long id) throws ServicePostNotFoundException {
+
+        return new ResponseEntity<>(servicePostService.getServicePostDTOById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/provider/{providerId}")
+    @PreAuthorize("hasRole('PROVIDER')")
+    public ResponseEntity<List<ServicePostDTO>> getServicePostsByProviderId(@AuthenticationPrincipal CustomUserDetails user) {
+
+        return new ResponseEntity<>(servicePostService.getAllServicePostsByProviderId(user.getId()), HttpStatus.OK);
+
+
+    }
 
 
 }

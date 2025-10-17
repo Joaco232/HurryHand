@@ -1,7 +1,7 @@
 package com.hurryhand.backend.services;
 
-
 import com.hurryhand.backend.dto.servicepost.CreateServicePostDTO;
+import com.hurryhand.backend.dto.servicepost.ServicePostDTO;
 import com.hurryhand.backend.dto.servicepost.ServicePostForVisualDTO;
 import com.hurryhand.backend.enums.SortingDirection;
 import com.hurryhand.backend.enums.SortingServicePosts;
@@ -19,7 +19,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -71,12 +70,28 @@ public class ServicePostService {
 
     }
 
+    public ServicePostDTO getServicePostDTOById(Long id) throws ServicePostNotFoundException {
+
+        ServicePost servicePost = getServicePostById(id);
+
+        return servicePostMapper.toDto(servicePost);
+    }
+
 
     public void uploadPhotosURLsOfServicePost(ServicePost servicePost, List<String> newPhotosURLs) throws ServicePostNotFoundException {
 
         servicePost.setPhotosURLs(newPhotosURLs);
 
         servicePostRepository.save(servicePost);
+
+    }
+
+    public List<ServicePostDTO> getAllServicePostsByProviderId(Long providerId) {
+
+        return servicePostRepository.findAllByProviderId(providerId)
+                .stream()
+                .map(servicePost -> servicePostMapper.toDto(servicePost))
+                .toList();
 
     }
 
