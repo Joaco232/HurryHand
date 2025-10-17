@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetServicePostParamsDTO {
+public class  GetServicePostParamsDTO {
 
     @NotNull(message = "El número de página no puede ser null.")
     @Positive(message = "La página debe ser positiva.")

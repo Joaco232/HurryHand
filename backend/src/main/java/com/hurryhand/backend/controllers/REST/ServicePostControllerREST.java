@@ -6,6 +6,8 @@ import com.hurryhand.backend.dto.servicepost.CreateServicePostDTO;
 import com.hurryhand.backend.dto.servicepost.GetServicePostParamsDTO;
 import com.hurryhand.backend.dto.servicepost.ServicePostDTO;
 import com.hurryhand.backend.dto.servicepost.ServicePostForVisualDTO;
+import com.hurryhand.backend.enums.SortingDirection;
+import com.hurryhand.backend.enums.SortingServicePosts;
 import com.hurryhand.backend.exceptions.servicepost.ServicePostNotFoundException;
 import com.hurryhand.backend.mappers.ApiResponseMapper;
 import com.hurryhand.backend.models.Provider;
@@ -16,6 +18,8 @@ import com.hurryhand.backend.services.ProviderService;
 import com.hurryhand.backend.services.ServicePostService;
 import com.hurryhand.backend.services.UserService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -87,17 +91,23 @@ public class ServicePostControllerREST {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Page<ServicePostForVisualDTO>>  getAllServicePostsForVisual(@Valid @RequestBody GetServicePostParamsDTO  getServicePostParamsDTO) {
+    public ResponseEntity<Page<ServicePostForVisualDTO>> getAllServicePostsForVisual(
+            @RequestParam(name = "page", defaultValue = "1") @Positive(message = "La página debe ser positiva.") int page,
+            @RequestParam(name = "size", defaultValue = "10") @Positive(message = "El tamaño de página debe ser positivo.") int size,
+            @RequestParam(name = "sortBy", defaultValue = "createdAt") @NotNull(message = "Se debe indicar el atributo por el cual se ordena.") SortingServicePosts sortBy,
+            @RequestParam(name = "direction") @NotNull(message = "Se debe indicar la dirección en la que se ordena.") SortingDirection direction,
+            @RequestParam(name = "query", required = false) String query) {
 
         // Convertir de página base-1 (frontend) a base-0 (Spring Data)
-        Page<ServicePostForVisualDTO> pageOfServicePosts = servicePostService.getPostsForVisual(getServicePostParamsDTO.getPage() - 1,
-                getServicePostParamsDTO.getSize(),
-                getServicePostParamsDTO.getSortBy(),
-                getServicePostParamsDTO.getDirection(),
-                getServicePostParamsDTO.getQuery());
+        Page<ServicePostForVisualDTO> pageOfServicePosts = servicePostService.getPostsForVisual(
+                page - 1,
+                size,
+                sortBy,
+                direction,
+                query
+        );
 
         return new ResponseEntity<>(pageOfServicePosts, HttpStatus.OK);
-
     }
 
     @PostMapping("/servicepost-photos")
@@ -118,7 +128,7 @@ public class ServicePostControllerREST {
         return new ResponseEntity<>(servicePostService.getServicePostDTOById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/provider/{providerId}")
+    @GetMapping("/provider")
     @PreAuthorize("hasRole('PROVIDER')")
     public ResponseEntity<List<ServicePostDTO>> getServicePostsByProviderId(@AuthenticationPrincipal CustomUserDetails user) {
 
