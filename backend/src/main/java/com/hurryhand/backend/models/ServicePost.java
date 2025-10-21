@@ -97,7 +97,9 @@ public class ServicePost {
         }
 
         OptionalDouble OptAverageRating = this.appointments.stream()
-                .map(appointment -> appointment.getReview().getRating())
+                .map(appointment -> appointment.getReview())
+                .filter(valor -> valor != null)
+                .map(review -> review.getRating())
                 .filter(valor -> valor != null)
                 .mapToDouble(value -> value.doubleValue())
                 .average();
