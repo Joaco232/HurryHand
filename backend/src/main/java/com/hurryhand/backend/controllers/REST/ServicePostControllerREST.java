@@ -37,7 +37,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/service-post")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 public class ServicePostControllerREST {
 
