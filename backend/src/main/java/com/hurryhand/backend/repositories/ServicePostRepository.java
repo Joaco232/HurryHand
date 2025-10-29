@@ -5,9 +5,11 @@ import com.hurryhand.backend.models.ServicePost;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,5 +34,17 @@ public interface ServicePostRepository extends JpaRepository<ServicePost, Long> 
     boolean existsServicePostByTitleAndProvider(String title,  Provider provider);
 
     List<ServicePost> findAllByProviderId(Long providerId);
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query(
+            value = "DELETE FROM available_dates " +
+                    "WHERE service_post_id = :servicePostId " +
+                    "AND date_time = :dateTime",
+            nativeQuery = true
+    )
+    int deleteAvailableDate(@Param("servicePostId") Long servicePostId,
+                            @Param("dateTime") LocalDateTime dateTime);
+
+
 
 }

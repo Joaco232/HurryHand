@@ -117,6 +117,25 @@ public class ServicePostService {
 
 
 
+    public void addAvailableDate(ServicePost servicePost, LocalDateTime dateToAdd, Long providerId) {
+
+
+        List<LocalDateTime> dateAppointments = servicePost.getAppointments().stream().
+                map(appointment -> appointment.getDateTime()).toList();
+
+        servicePostValidator.validateProviderOwnsServicePost(servicePost, providerId);
+        servicePostValidator.validateNewDateHasNoConflict(servicePost.getAvailableDates(), dateAppointments, dateToAdd, servicePost.getDuration());
+
+
+
+
+
+    }
+
+
+
+
+
 
 
 

@@ -10,6 +10,8 @@ import com.hurryhand.backend.models.ServicePost;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 @RequiredArgsConstructor
 public class ServicePostMapper {
@@ -65,7 +67,8 @@ public class ServicePostMapper {
                 .price(servicePost.getPrice())
                 .duration(servicePost.getDuration())
                 .createdAt(servicePost.getCreatedAt())
-                .availableDates(servicePost.getAvailableDates())
+                .availableDates(servicePost.getAvailableDates().stream()
+                        .filter(date -> date.isAfter(LocalDateTime.now())).toList())
                 .photosURLs(servicePost.getPhotosURLs())
                 .providerId(servicePost.getProvider().getId())
                 .build();

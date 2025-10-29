@@ -1,10 +1,7 @@
 package com.hurryhand.backend.validations;
 
 
-import com.hurryhand.backend.exceptions.servicepost.PastAvailablesDatesException;
-import com.hurryhand.backend.exceptions.servicepost.ProviderDoesNotOwnServicePostException;
-import com.hurryhand.backend.exceptions.servicepost.ServicePostHasAppointmentsException;
-import com.hurryhand.backend.exceptions.servicepost.ServicePostTitleAlreadyInUseByProviderException;
+import com.hurryhand.backend.exceptions.servicepost.*;
 import com.hurryhand.backend.models.Appointment;
 import com.hurryhand.backend.models.Provider;
 import com.hurryhand.backend.models.ServicePost;
@@ -14,8 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
@@ -59,6 +58,39 @@ public class ServicePostValidator {
         }
     }
 
+    public void validateNewDateHasNoConflict(List<LocalDateTime> availableDates, List<LocalDateTime> appointmentDates,
+                                             LocalDateTime newDate, Integer durationMin) throws DateConflictsException {
+
+        boolean hasConflict = Stream.of(availableDates, appointmentDates)
+                .filter(list -> list != null)
+                .flatMap(list -> list.stream())
+                .anyMatch(date -> doIntervalsOverlap(
+                        date,
+                        date.plusMinutes(durationMin),
+                        newDate,
+                        newDate.plusMinutes(durationMin)
+                ));
+
+        if (hasConflict) {
+
+            throw new DateConflictsException("Fechas en conflicto.");
+        }
+
+    }
+
+    private Boolean doIntervalsOverlap(LocalDateTime date1Start, LocalDateTime date1End,
+                                       LocalDateTime date2Start, LocalDateTime date2End) {
+
+        if (date2End.isBefore(date1Start)) {
+            return false;
+        }
+
+        if (date1End.isBefore(date2Start)) {
+            return false;
+        }
+
+        return true;
+    }
 
 
 
