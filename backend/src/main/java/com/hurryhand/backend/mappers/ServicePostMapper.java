@@ -4,6 +4,7 @@ import com.hurryhand.backend.dto.servicepost.CreateServicePostDTO;
 import com.hurryhand.backend.dto.servicepost.ServicePostDTO;
 import com.hurryhand.backend.dto.servicepost.ServicePostForVisualDTO;
 import com.hurryhand.backend.exceptions.attribute.NullValueForMapperException;
+import com.hurryhand.backend.exceptions.servicepost.ServicePostNotFoundException;
 import com.hurryhand.backend.models.Provider;
 import com.hurryhand.backend.models.ServicePost;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,7 @@ public class ServicePostMapper {
     public ServicePost toEntity(CreateServicePostDTO createServicePostDTO, Provider provider) {
 
         if (createServicePostDTO == null || provider == null) {
-            throw new NullValueForMapperException("Dto o provider es null.");
-
+            throw new ServicePostNotFoundException("Dto o provider es null."); //cambiar prueba algo explotaba
         }
 
         return ServicePost.builder()
@@ -42,6 +42,7 @@ public class ServicePostMapper {
         }
 
         return ServicePostForVisualDTO.builder()
+                .id(servicePost.getId())
                 .title(servicePost.getTitle())
                 .price(servicePost.getPrice())
                 .photosURLs(servicePost.getPhotosURLs())
