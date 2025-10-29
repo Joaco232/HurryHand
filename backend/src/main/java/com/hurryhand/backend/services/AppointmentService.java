@@ -34,12 +34,14 @@ public class AppointmentService {
         ServicePost servicePost = servicePostService.getServicePostById(createAppointmentDTO.getServicePostId());
 
         appointmentValidator.validateAppointmentCreatorIsNotServicePostOwner(servicePost, user);
-
         appointmentValidator.validateDateTimeIsAvailable(servicePost, createAppointmentDTO.getDateTime());
 
-        servicePost.getAvailableDates().remove(createAppointmentDTO.getDateTime());
+        servicePostRepository.deleteAvailableDate(
+                createAppointmentDTO.getServicePostId(),
+                createAppointmentDTO.getDateTime()
+        );
 
-        servicePostRepository.save(servicePost);
+        servicePost.getAvailableDates().remove(createAppointmentDTO.getDateTime());
 
         appointmentRepository.save(appointmentMapper.toEntity(createAppointmentDTO, servicePost, user));
 

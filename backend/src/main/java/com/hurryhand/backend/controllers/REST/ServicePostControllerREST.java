@@ -156,13 +156,27 @@ public class ServicePostControllerREST {
     public ResponseEntity<ApiResponse> deleteAvailableDate(
             @PathVariable Long servicePostId,
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateToDelete,
-            @AuthenticationPrincipal BaseUser user) {
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
 
         ServicePost servicePost = servicePostService.getServicePostById(servicePostId);
 
-        servicePostService.deleteAvailableDateFromServicePost(servicePost, dateToDelete, user.getId());
+        servicePostService.deleteAvailableDateFromServicePost(servicePost, dateToDelete, userDetails.getId());
 
         return apiResponseMapper.makeResponseEntity(HttpStatus.OK, "Horario eliminado.");
+    }
+
+    @PatchMapping("/{servicePostId}/available-dates")
+    @PreAuthorize("hasRole('PROVIDER')")
+    public ResponseEntity<ApiResponse> addAvailableDate(
+            @PathVariable Long servicePostId,
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateToAdd,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        ServicePost servicePost = servicePostService.getServicePostById(servicePostId);
+
+        servicePostService.addAvailableDate(servicePost, dateToAdd, userDetails.getId());
+
+        return apiResponseMapper.makeResponseEntity(HttpStatus.OK, "Horario agregado.");
     }
 
 
