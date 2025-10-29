@@ -10,6 +10,7 @@ import com.hurryhand.backend.enums.SortingDirection;
 import com.hurryhand.backend.enums.SortingServicePosts;
 import com.hurryhand.backend.exceptions.servicepost.ServicePostNotFoundException;
 import com.hurryhand.backend.mappers.ApiResponseMapper;
+import com.hurryhand.backend.models.BaseUser;
 import com.hurryhand.backend.models.Provider;
 import com.hurryhand.backend.models.ServicePost;
 import com.hurryhand.backend.security.CustomUserDetails;
@@ -23,6 +24,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,7 +32,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.MediaType;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -136,6 +140,32 @@ public class ServicePostControllerREST {
 
 
     }
+
+    @DeleteMapping("/{servicePostId}")
+    @PreAuthorize("hasRole('PROVIDER')")
+    public ResponseEntity<ApiResponse> deleteServicePost(@PathVariable Long servicePostId, @AuthenticationPrincipal CustomUserDetails user) {
+
+        ServicePost servicePost = servicePostService.getServicePostById(servicePostId);
+        servicePostService.deleteServicePost(servicePost, user.getId());
+
+        return apiResponseMapper.makeResponseEntity(HttpStatus.OK, "Service Post eliminado.");
+    }
+
+    @DeleteMapping("/{servicePostId}/available-dates")
+    @PreAuthorize("hasRole('PROVIDER')")
+    public ResponseEntity<ApiResponse> deleteAvailableDate(
+            @PathVariable Long servicePostId,
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateToDelete,
+            @AuthenticationPrincipal BaseUser user) {
+
+        ServicePost servicePost = servicePostService.getServicePostById(servicePostId);
+
+        servicePostService.deleteAvailableDateFromServicePost(servicePost, dateToDelete, user.getId());
+
+        return apiResponseMapper.makeResponseEntity(HttpStatus.OK, "Horario eliminado.");
+    }
+
+
 
 
 }

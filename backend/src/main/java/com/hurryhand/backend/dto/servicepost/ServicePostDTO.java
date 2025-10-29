@@ -32,6 +32,8 @@ public class ServicePostDTO {
 
     private List<String> photosURLs;
 
+    private Long providerId;
+
 
 
 
