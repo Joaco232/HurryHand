@@ -19,6 +19,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -95,6 +97,23 @@ public class ServicePostService {
 
     }
 
+
+    public void deleteServicePost(ServicePost servicePost, Long providerId) {
+
+        servicePostValidator.validateServicePostHasNoAppointments(servicePost.getAppointments());
+        servicePostValidator.validateProviderOwnsServicePost(servicePost, providerId);
+
+        servicePostRepository.delete(servicePost);
+    }
+
+    public void deleteAvailableDateFromServicePost(ServicePost servicePost, LocalDateTime dateToDelete, Long providerId) {
+
+        servicePostValidator.validateProviderOwnsServicePost(servicePost, providerId);
+
+        servicePost.getAvailableDates().remove(dateToDelete);
+
+        servicePostRepository.save(servicePost);
+    }
 
 
 

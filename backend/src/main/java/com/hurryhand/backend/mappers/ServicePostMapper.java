@@ -66,6 +66,7 @@ public class ServicePostMapper {
                 .createdAt(servicePost.getCreatedAt())
                 .availableDates(servicePost.getAvailableDates())
                 .photosURLs(servicePost.getPhotosURLs())
+                .providerId(servicePost.getProvider().getId())
                 .build();
 
     }
