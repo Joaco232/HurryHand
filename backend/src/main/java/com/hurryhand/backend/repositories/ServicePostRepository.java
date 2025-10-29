@@ -46,5 +46,14 @@ public interface ServicePostRepository extends JpaRepository<ServicePost, Long> 
                             @Param("dateTime") LocalDateTime dateTime);
 
 
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query(
+            value = "INSERT INTO available_dates (service_post_id, date_time) " +
+                    "VALUES (:servicePostId, :dateTime)",
+            nativeQuery = true
+    )
+    int insertAvailableDate(@Param("servicePostId") Long servicePostId,
+                            @Param("dateTime") LocalDateTime dateTime);
+
 
 }
