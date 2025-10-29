@@ -98,6 +98,7 @@ public class ServicePostService {
     }
 
 
+    @Transactional
     public void deleteServicePost(ServicePost servicePost, Long providerId) {
 
         servicePostValidator.validateServicePostHasNoAppointments(servicePost.getAppointments());
@@ -106,17 +107,17 @@ public class ServicePostService {
         servicePostRepository.delete(servicePost);
     }
 
+
+    @Transactional
     public void deleteAvailableDateFromServicePost(ServicePost servicePost, LocalDateTime dateToDelete, Long providerId) {
 
         servicePostValidator.validateProviderOwnsServicePost(servicePost, providerId);
 
-        servicePost.getAvailableDates().remove(dateToDelete);
-
-        servicePostRepository.save(servicePost);
+        servicePostRepository.deleteAvailableDate(servicePost.getId(), dateToDelete);
     }
 
 
-
+    @Transactional
     public void addAvailableDate(ServicePost servicePost, LocalDateTime dateToAdd, Long providerId) {
 
 
@@ -126,10 +127,7 @@ public class ServicePostService {
         servicePostValidator.validateProviderOwnsServicePost(servicePost, providerId);
         servicePostValidator.validateNewDateHasNoConflict(servicePost.getAvailableDates(), dateAppointments, dateToAdd, servicePost.getDuration());
 
-
-
-
-
+        servicePostRepository.insertAvailableDate(servicePost.getId(), dateToAdd);
     }
 
 
