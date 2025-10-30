@@ -34,7 +34,7 @@ public class Appointment {
 
     @Column(name = "DATE_TIME", nullable = false)
     @NotNull(message = "La fecha y hora no pueden ser nulas.")
-    @FutureOrPresent(message = "La fecha debe estar en el presente o futuro.")
+    //@FutureOrPresent(message = "La fecha debe estar en el presente o futuro.")
     private LocalDateTime dateTime;
 
     @Enumerated(EnumType.STRING)
