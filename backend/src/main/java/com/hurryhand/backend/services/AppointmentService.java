@@ -15,7 +15,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 
 @Service
@@ -59,6 +62,16 @@ public class AppointmentService {
     }
 
 
+
+    public List<AppointmentShowDTO> getPastAppointmentsToShowByUser(User user) {
+
+        List<Appointment> allAppointments = appointmentRepository.findAllByCliente(user);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        return allAppointments.stream().filter(appoint -> appoint.getDateTime().isBefore(now)).map(appoint->appointmentMapper.toShowDTO(appoint)).toList();
+
+    }
 
 
 

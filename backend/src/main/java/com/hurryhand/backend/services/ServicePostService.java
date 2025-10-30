@@ -37,7 +37,7 @@ public class ServicePostService {
 
         servicePostValidator.validateUniqueTitleByProvider(createServicePostDTO.getTitle(), provider);
 
-        servicePostValidator.validatePastAvailableDates(createServicePostDTO.getAvailableDates());
+        //servicePostValidator.validatePastAvailableDates(createServicePostDTO.getAvailableDates());
 
         return servicePostRepository.save(servicePostMapper.toEntity(createServicePostDTO, provider));
     }
