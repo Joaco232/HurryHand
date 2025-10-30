@@ -55,6 +55,18 @@ public class AppointmentControllerREST {
     }
 
 
+    @GetMapping("/past/my")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<AppointmentShowDTO>> getAllMyPastAppointments(@AuthenticationPrincipal CustomUserDetails user) {
+
+        User actualUser = userService.getUserById(user.getId());
+
+        List<AppointmentShowDTO> appointments = appointmentService.getPastAppointmentsToShowByUser(actualUser);
+
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
+    }
+
+
 
 
 }
