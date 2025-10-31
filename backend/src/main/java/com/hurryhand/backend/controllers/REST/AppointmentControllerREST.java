@@ -55,6 +55,7 @@ public class AppointmentControllerREST {
     }
 
 
+    // tiene que ser without revierw
     @GetMapping("/past/my")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<AppointmentShowDTO>> getAllMyPastAppointments(@AuthenticationPrincipal CustomUserDetails user) {

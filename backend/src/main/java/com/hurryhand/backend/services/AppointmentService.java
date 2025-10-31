@@ -69,7 +69,13 @@ public class AppointmentService {
 
         LocalDateTime now = LocalDateTime.now();
 
-        return allAppointments.stream().filter(appoint -> appoint.getDateTime().isBefore(now)).map(appoint->appointmentMapper.toShowDTO(appoint)).toList();
+        return allAppointments.stream()
+                .filter(appoint -> appoint.getDateTime().isBefore(now))  
+                .filter(appoint -> appoint.getReview() == null)
+                .map(appointmentMapper::toShowDTO)
+                .toList();
+
+        //return allAppointments.stream().filter(appoint -> appoint.getDateTime().isBefore(now)).map(appoint->appointmentMapper.toShowDTO(appoint)).toList();
 
     }
 
