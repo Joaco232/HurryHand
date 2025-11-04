@@ -126,11 +126,11 @@ public class ServicePostControllerREST {
     }
 
 
-    //@GetMapping("/{id}")
-    //public ResponseEntity<ServicePostDTO> getServicePostDTOById(@PathVariable Long id) throws ServicePostNotFoundException {
+    @GetMapping("/{id}")
+    public ResponseEntity<ServicePostDTO> getServicePostDTOById(@PathVariable Long id) throws ServicePostNotFoundException {
 
-    //    return new ResponseEntity<>(servicePostService.getServicePostDTOById(id), HttpStatus.OK);
-    //}
+        return new ResponseEntity<>(servicePostService.getServicePostDTOById(id), HttpStatus.OK);
+    }
 
     @GetMapping("/provider")
     @PreAuthorize("hasRole('PROVIDER')")
