@@ -1,0 +1,14 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "hurryhand-backend",
+      "image": "ghcr.io/joaco232/hurryhand-backend:latest",
+      "essential": true,
+      "memory": 512,
+      "portMappings": [
+        { "containerPort": 8080, "hostPort": 8080 }
+      ]
+    }
+  ]
+}
