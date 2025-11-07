@@ -37,6 +37,7 @@ public class CredentialService {
 
     }
 
+    @Transactional
     public void addCertificateToCredential(String certificateUrl, Credential credential){
         credential.setCertificateUrl(certificateUrl);
         credentialRepository.save(credential);

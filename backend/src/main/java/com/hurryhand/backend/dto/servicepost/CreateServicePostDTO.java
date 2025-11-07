@@ -39,7 +39,6 @@ public class CreateServicePostDTO {
 
     @NotNull(message = "La descripción no puede ser nula.")
     @Size(min = 4, max = 1000, message = "La descripción debe contener entre 4 y 1000 caracteres.")
-    @Pattern(regexp = "^[a-zA-Z0-9áéíóúÁÉÍÓÚüÜñÑ\\s'\\-]*$", message = "La descripción solo puede contener letras, números y espacios.")
     private String description;
 
     @NotNull(message = "Debe ingresar la duración del servicio.")

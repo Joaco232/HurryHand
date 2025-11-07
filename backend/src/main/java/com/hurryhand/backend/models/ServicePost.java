@@ -40,7 +40,6 @@ public class ServicePost {
     @Column(name = "DESCRIPTION", nullable = false, length = 1000)
     @NotNull(message = "La descripción no puede ser nula.")
     @Size(min = 4, max = 1000, message = "La descripción debe contener entre 4 y 1000 caracteres.")
-    @Pattern(regexp = "^[a-zA-Z0-9áéíóúÁÉÍÓÚüÜñÑ\\s'\\-]*$", message = "La descripción solo puede contener letras, números y espacios.")
     private String description;
 
     @Column(name = "RATING", precision = 2, scale = 1)
