@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Component
 @RequiredArgsConstructor
@@ -68,7 +69,7 @@ public class ServicePostMapper {
                 .duration(servicePost.getDuration())
                 .createdAt(servicePost.getCreatedAt())
                 .availableDates(servicePost.getAvailableDates().stream()
-                        .filter(date -> date.isAfter(LocalDateTime.now())).toList())
+                        .filter(date -> date.isAfter(LocalDateTime.now(ZoneId.of("America/Montevideo")))).toList())
                 .photosURLs(servicePost.getPhotosURLs())
                 .providerId(servicePost.getProvider().getId())
                 .build();

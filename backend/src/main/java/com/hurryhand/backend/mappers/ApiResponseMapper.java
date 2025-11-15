@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Map;
 
 @Component
@@ -16,7 +17,7 @@ public class ApiResponseMapper {
     public ResponseEntity<ApiResponse> makeResponseEntity(HttpStatus status, String message) {
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .timestamp(LocalDateTime.now())
+                .timestamp(LocalDateTime.now(ZoneId.of("America/Montevideo")))
                 .status(status.value())
                 .message(message)
                 .build();

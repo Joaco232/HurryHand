@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -67,7 +68,7 @@ public class AppointmentService {
 
         List<Appointment> allAppointments = appointmentRepository.findAllByCliente(user);
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("America/Montevideo"));
 
         return allAppointments.stream()
                 .filter(appoint -> appoint.getDateTime().isBefore(now))  

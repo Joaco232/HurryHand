@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class ServicePostValidator {
 
     public void validatePastAvailableDates(List<LocalDateTime> availableDates) throws PastAvailablesDatesException {
 
-        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of("America/Montevideo"));
 
         for (LocalDateTime date: availableDates){
             if (date.isBefore(currentDateTime)){
@@ -44,7 +45,7 @@ public class ServicePostValidator {
 
     public void validateServicePostHasNoAppointments(List<Appointment> appointments) throws ServicePostHasAppointmentsException {
 
-        if (!appointments.stream().filter(appointment -> appointment.getDateTime().isAfter(LocalDateTime.now())).toList().isEmpty()) {
+        if (!appointments.stream().filter(appointment -> appointment.getDateTime().isAfter(LocalDateTime.now(ZoneId.of("America/Montevideo")))).toList().isEmpty()) {
             throw new ServicePostHasAppointmentsException("El service post tiene citas asociadas y no puede ser eliminado o modificado.");
         }
     }

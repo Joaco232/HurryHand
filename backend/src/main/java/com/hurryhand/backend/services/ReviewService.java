@@ -2,6 +2,7 @@ package com.hurryhand.backend.services;
 
 
 import com.hurryhand.backend.dto.review.CreateReviewDTO;
+import com.hurryhand.backend.dto.review.ReviewForInfoDTO;
 import com.hurryhand.backend.mappers.ReviewMapper;
 import com.hurryhand.backend.models.Appointment;
 import com.hurryhand.backend.models.Review;
@@ -17,6 +18,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,5 +51,15 @@ public class ReviewService {
 
         servicePostRepository.save(servicePost);
     }
+
+
+    @Transactional
+    public List<ReviewForInfoDTO> getReviewsInfoByServicePostId(Long servicePostId) {
+
+        List<Review> reviews = reviewRepository.findAllByAppointment_ServicePost_Id(servicePostId);
+
+        return reviews.stream().map(review -> reviewMapper.toReviewForInfoDTO(review)).toList();
+    }
+
 
 }

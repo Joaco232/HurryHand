@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -146,7 +147,7 @@ public class GlobalExceptionHandler {
                                                         String path, Map<String, String> validationErrors) {
 
         ApiError apiError = ApiError.builder()
-                .timestamp(LocalDateTime.now())
+                .timestamp(LocalDateTime.now(ZoneId.of("America/Montevideo")))
                 .status(status.value())
                 .error(error)
                 .message(message)

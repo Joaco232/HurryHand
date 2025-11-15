@@ -17,8 +17,10 @@ WORKDIR /app
 # Copiar el jar
 COPY --from=build /app/target/*.jar app.jar
 
-# Puerto dinámico para Render
-ENV PORT=8080
-EXPOSE 8080
+# Puerto HTTPS principal
+ENV PORT=8443
+# Puerto HTTP opcional para redirección (se puede desactivar no mapeándolo)
+ENV HTTP_PORT=8080
+EXPOSE 8443 8080
 
 CMD ["java", "-jar", "app.jar"]

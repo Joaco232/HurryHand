@@ -3,6 +3,7 @@ package com.hurryhand.backend.controllers.REST;
 import com.hurryhand.backend.dto.ApiResponse;
 import com.hurryhand.backend.dto.credential.CredentialResponseDTO;
 import com.hurryhand.backend.dto.review.CreateReviewDTO;
+import com.hurryhand.backend.dto.review.ReviewForInfoDTO;
 import com.hurryhand.backend.dto.servicepost.CreateServicePostDTO;
 import com.hurryhand.backend.mappers.ApiResponseMapper;
 import com.hurryhand.backend.models.Appointment;
@@ -43,6 +44,15 @@ public class ReviewControllerREST {
 
         reviewService.createReview(reviewDTO, appointmentOfReview, activeUser);
         return apiResponseMapper.makeResponseEntity(HttpStatus.OK,"Review creada con exito");
+    }
+
+
+    @GetMapping("/service-post/{servicePostId}")
+    public ResponseEntity<List<ReviewForInfoDTO>> getReviewsInfoByServicePostId(@PathVariable Long servicePostId) {
+
+        List<ReviewForInfoDTO> reviewsInfoDTOs = reviewService.getReviewsInfoByServicePostId(servicePostId);
+
+        return new ResponseEntity<>(reviewsInfoDTOs, HttpStatus.OK);
     }
 
 

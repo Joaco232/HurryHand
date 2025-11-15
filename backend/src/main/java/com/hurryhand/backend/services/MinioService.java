@@ -58,7 +58,7 @@ public class MinioService {
 
         } catch (Exception e) {
 
-            throw new FailedToUploadPhotosException("No se ha podido subir la foto de perfil.");
+            throw new FailedToUploadPhotosException("No se ha podido subir la foto de perfil." + e.getMessage());
         }
     }
 

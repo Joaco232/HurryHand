@@ -23,10 +23,40 @@ public interface ServicePostRepository extends JpaRepository<ServicePost, Long> 
     Page<ServicePost> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 
     @Query(
-            value = "SELECT * FROM SERVICE_POSTS " +
-                    "WHERE to_tsvector('spanish', title || ' ' || description) @@ to_tsquery('spanish', :query)",
-            countQuery = "SELECT count(*) FROM service_post " +
-                    "WHERE to_tsvector('spanish', title || ' ' || description) @@ to_tsquery('spanish', :query)",
+            value = """
+        SELECT * FROM service_posts 
+        WHERE (
+            to_tsvector('spanish', title || ' ' || description)
+            @@ to_tsquery('spanish', 
+                regexp_replace(:query, '\\s+', ':* | ', 'g') || ':*'
+            )
+            OR title ILIKE ANY (
+                SELECT array_agg('%' || w || '%' )
+                FROM regexp_split_to_table(:query, '\\s+') AS w
+            )
+            OR description ILIKE ANY (
+                SELECT array_agg('%' || w || '%' )
+                FROM regexp_split_to_table(:query, '\\s+') AS w
+            )
+        )
+        """,
+            countQuery = """
+        SELECT count(*) FROM service_posts 
+        WHERE (
+            to_tsvector('spanish', title || ' ' || description)
+            @@ to_tsquery('spanish', 
+                regexp_replace(:query, '\\s+', ':* | ', 'g') || ':*'
+            )
+            OR title ILIKE ANY (
+                SELECT array_agg('%' || w || '%' )
+                FROM regexp_split_to_table(:query, '\\s+') AS w
+            )
+            OR description ILIKE ANY (
+                SELECT array_agg('%' || w || '%' )
+                FROM regexp_split_to_table(:query, '\\s+') AS w
+            )
+        )
+        """,
             nativeQuery = true
     )
     Page<ServicePost> searchFullText(@Param("query") String query, Pageable pageable);
